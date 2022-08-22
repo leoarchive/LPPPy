@@ -1,0 +1,26 @@
+programa Examplo2
+
+var
+  RESULTADO: caractere
+  N1, N2, N3, N4: real
+  SOMA, MEDIA: real
+
+inicio
+  leia N1, N2, N3, N4
+  SOMA ← N1 + N2 + N3 + N4
+  MEDIA ← SOMA / 4
+
+  se (MEDIA >= 7) então
+    RESULTADO ← "Aprovado"
+  senão
+    RESULTADO ← "Reprovado"
+  fim_se
+
+  escreva "Nota 1:", N1
+  escreva "Nota 2:", N2
+  escreva "Nota 3:", N3
+  escreva "Nota 4:", N4
+  escreva "Soma:", SOMA
+  escreva "Média:", MEDIA
+  escreva "Resultado:", RESULTADO
+fim
