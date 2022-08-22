@@ -5,8 +5,11 @@ class TokenTypes(Enum):
   numb      = 2
   lArrow    = 3
   rArrow    = 4
-  bLine     = 5
-  programa  = 6
+  programa  = 5
+  var       = 6
+  colon     = 7
+  dType     = 8
+  inicio    = 9
 
 class Token:
   key       = ''
@@ -20,11 +23,11 @@ class Token:
 
   def getType(key):
     match key:
-      case 'programa':
-        return TokenTypes.programa
-      case '←':
-        return TokenTypes.rArrow
-      case '→':
-        return TokenTypes.lArrow
-      case _: 
-        return TokenTypes.id
+      case 'var':                 return TokenTypes.var
+      case 'programa':            return TokenTypes.programa
+      case 'inicio':              return TokenTypes.inicio
+      case '←':                   return TokenTypes.rArrow
+      case '→':                   return TokenTypes.lArrow
+      case ':':                   return TokenTypes.colon
+      case 'caractere' | 'real':  return TokenTypes.dType
+      case _:                     return TokenTypes.id

@@ -1,18 +1,23 @@
+import ast
 from .lex import Lexer
 from .parser import Parser
+from .code import CodeGen
 
 class Transpiler:
-  stdin   = ''
-  lexer   = None 
-  parser  = None 
+  stdin     = ''
+  stdout    = ''
+  lexer     = None 
+  parser    = None 
+  codegen   = None 
+  ast       = []
 
   def __init__(self, stdin):
-    self.stdin  = stdin
-    self.lexer  = Lexer(stdin)
-    self.parser = Parser(self.lexer)
+    self.stdin    = stdin
+    self.lexer    = Lexer(stdin)
+    self.parser   = Parser(self.lexer)
+    self.codegen  = CodeGen()
 
   def run(self):
     self.parser.run()
-
-    # print(self.lexer.lex().__dict__)
-    # print(self.lexer.lex().__dict__)
+    self.codegen.run(self.parser.ast)
+    self.stdout   = self.codegen.stdout
