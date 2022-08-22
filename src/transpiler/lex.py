@@ -4,9 +4,9 @@ from .token import Token, TokenTypes
 class Lexer:
   stdin     = ''
   index     = 0
-  line      = 0
-  keyWords  = ['programa']
-  operators = ['←','→']
+  line      = 1
+  keyWords  = ['programa','var','caractere','real','inicio']
+  operators = ['←','→',':']
   chars     = ['\n']
   
   def __init__(self, stdin):
@@ -14,8 +14,9 @@ class Lexer:
 
   def lex_string(self):
     start = self.index
-    while len(self.stdin) > self.index and self.stdin[self.index].isalpha():
+    while self.stdin[self.index].isalpha() or self.stdin[self.index].isnumeric():
       self.index += 1
+      if (len(self.stdin) <= self.index): break
 
     key   = self.stdin[start:self.index]
     token = self.lex_keyword(key)
@@ -38,6 +39,7 @@ class Lexer:
   def lex_operator(self, key):
     for operator in self.operators:
       if (key == operator): 
+        self.index += 1
         return Token(key, Token.getType(key), self.line)
 
   def lex_chars(self, key):
@@ -46,11 +48,15 @@ class Lexer:
         match key:
           case '\n':
             self.line += 1
-            return Token(key, TokenTypes.bLine, self.line)
+            break
 
   def lex(self):
-    if (len(self.stdin) < self.index): 
-      raise Error(ErrorTypes.lexer_unexpected_token, "EOF", self.line)
+    if (len(self.stdin) <= self.index):
+      token = {
+        'key': 'eof',
+        'line': self.line
+      }
+      raise Error(ErrorTypes.lexer_unexpected_token, token)
       
     key = self.stdin[self.index]
  
