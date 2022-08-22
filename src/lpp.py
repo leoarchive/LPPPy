@@ -1,6 +1,6 @@
 from transpiler.main import Transpiler
 from pathlib import Path
-txt = Path('./examples/example1.lpp').read_text()
+txt = Path('./examples/variables.lpp').read_text()
 class LPP:
   transpiler = None
 
