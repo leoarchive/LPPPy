@@ -5,7 +5,7 @@ class Lexer:
   stdin     = ''
   index     = 0
   line      = 1
-  keyWords  = ['programa','var','caractere','real','inicio']
+  keyWords  = ['programa','var','caractere','real','inicio','fim']
   operators = ['←','→',':']
   chars     = ['\n']
   

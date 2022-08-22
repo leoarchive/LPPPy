@@ -19,7 +19,7 @@ class CodeGen:
 
   def initialPipeline(self):
     self.stdout   =   f'# programa {self.ast[self.index].key}\n\n'
-    self.stdout   +=  f'# vars\n'
+    self.stdout   +=  '# var\n'
     self.index    +=  1
     self.varBlock()
 
@@ -27,3 +27,13 @@ class CodeGen:
     while self.ast[self.index].type != TokenTypes.inicio:
       self.stdout += f'{self.ast[self.index].key} = {self.getDType(self.ast[self.index + 1].key)}\n'
       self.index  += 2
+    
+    self.inicioBlock()
+
+  def inicioBlock(self):
+    self.stdout   +=  '\n# inicio\n'
+    self.index    += 1
+    token = self.ast[self.index]
+    match token.type:
+      case TokenTypes.fim:
+        self.stdout   +=  '\n# fim\n'

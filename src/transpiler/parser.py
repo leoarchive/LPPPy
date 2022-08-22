@@ -22,12 +22,18 @@ class Parser:
   def varBlock(self, token):
     if (token.type == TokenTypes.inicio): 
       self.checkToken(token, TokenTypes.inicio)
-      return 
+      return self.inicioBlock()
     self.checkToken(token, TokenTypes.id)
     self.checkToken(self.lexer.lex(), TokenTypes.colon)
     self.checkToken(self.lexer.lex(), TokenTypes.dType)
     self.varBlock(self.lexer.lex())
    
+  def inicioBlock(self):
+    token = self.lexer.lex()
+    match token.type:
+      case TokenTypes.fim:
+        self.checkToken(token, TokenTypes.fim)
+
   def checkToken(self, token, expectedType):
     if (not token or token.type != expectedType): 
       raise Error(ErrorTypes.parser_unexpected_token, token)

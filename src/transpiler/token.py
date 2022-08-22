@@ -10,6 +10,7 @@ class TokenTypes(Enum):
   colon     = 7
   dType     = 8
   inicio    = 9
+  fim       = 10
 
 class Token:
   key       = ''
@@ -26,6 +27,7 @@ class Token:
       case 'var':                 return TokenTypes.var
       case 'programa':            return TokenTypes.programa
       case 'inicio':              return TokenTypes.inicio
+      case 'fim':                 return TokenTypes.fim
       case '←':                   return TokenTypes.rArrow
       case '→':                   return TokenTypes.lArrow
       case ':':                   return TokenTypes.colon

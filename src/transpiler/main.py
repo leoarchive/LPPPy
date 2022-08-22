@@ -1,4 +1,3 @@
-import ast
 from .lex import Lexer
 from .parser import Parser
 from .code import CodeGen
