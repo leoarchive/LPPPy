@@ -1,0 +1,21 @@
+programa VarDeclaracoes
+
+var
+  var1: inteiro
+  var2: caractere
+  var3: real
+  
+  var4: conjunto[1..10] de inteiro
+  var5: conjunto[1..10] de caractere
+  var6: conjunto[1..10] de real
+
+  var7, var8, var9, var10: conjunto[1..10] de inteiro
+  var11, var12, var13, var14: conjunto[1..10] de caractere
+  var15, var16, var17, var18: conjunto[1..10] de real
+
+  var19, var20, var21, var22: inteiro
+  var23, var24, var25, var26: caractere
+  var27, var28, var29, var30: real
+
+início
+fim

@@ -5,7 +5,7 @@ var
   N1, N2, N3, N4: real
   SOMA, MEDIA: real
 
-inicio
+início
   leia N1, N2, N3, N4
   SOMA ← N1 + N2 + N3 + N4
   MEDIA ← SOMA / 4

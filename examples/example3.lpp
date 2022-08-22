@@ -1,0 +1,13 @@
+programa Examplo3
+
+var
+  NOTAS: conjunto[1..8,1..4] de real
+  I,J: inteiro
+
+início
+  para I de 1 até 8 passo 1 faça
+    para J de 1 até 4 passo 1 faça
+      leia NOTAS[I,J]
+    fim_para
+  fim_para
+fim 
