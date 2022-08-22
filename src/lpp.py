@@ -1,9 +1,10 @@
-from transpiler import main
-
-transpiler = main.Transpiler('programa ←')
+from transpiler.main import Transpiler
 
 class LPP:
-  def __init__(self):
-    transpiler()
+  transpiler = None
 
-LPP
+  def __init__(self):
+    self.transpiler = Transpiler('programa Exemplo \n')
+    self.transpiler.run()
+
+LPP()
