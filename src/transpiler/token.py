@@ -11,6 +11,8 @@ class TokenKeys():
  dPeriod      =   '..'
  de           =   'de'
  inteiro      =   'inteiro'
+ leia         =   'leia'
+ escreva      =   'escreva'
  rArrow       =   '←',
  lArrow       =   '→',
  colon        =   ':',
@@ -34,7 +36,9 @@ class TokenTypes(Enum):
   dPeriod     =   13
   de          =   14
   dot         =   15
-
+  leia        =   16
+  escreva     =   17
+  
 class Token:
   key         =   ''
   type        =   0
@@ -50,6 +54,8 @@ class Token:
       case 'var':                 return TokenTypes.var
       case 'programa':            return TokenTypes.programa
       case 'início':              return TokenTypes.inicio
+      case 'leia':                return TokenTypes.leia
+      case 'escreva':             return TokenTypes.escreva
       case 'fim':                 return TokenTypes.fim
       case '←':                   return TokenTypes.rArrow
       case '→':                   return TokenTypes.lArrow

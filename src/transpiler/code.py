@@ -12,7 +12,7 @@ class CodeGen:
 
   def run(self, tokens):
     self.tokens = tokens
-    self.initialPipeline()
+    self.gen()
 
   def getDType(self, key, _keytype):
     match key:
@@ -27,13 +27,13 @@ class CodeGen:
           case _:                   return "[]" 
 
 
-  def initialPipeline(self):
-    self.stdout   =   f'# programa {self.tokens[self.index].key}\n\n'
+  def gen(self):
+    self.stdout   =   f'# programa {self.tokens[self.index].key}\n'
     self.stdout   +=  '# var\n'
     self.index    +=  1
-    self.varBlock()
+    self.genVarBlock()
 
-  def varBlock(self):
+  def genVarBlock(self):
     while self.tokens[self.index].type != TokenTypes.inicio: 
       if (self.tokens[self.index + 1].key == TokenKeys.conjunto):
         self.stdout += f'{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key)}\n'
@@ -71,11 +71,36 @@ class CodeGen:
         self.stdout += f'{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, None)}\n'
       self.index  += 2
     
-    self.inicioBlock()
+    self.genBlock()
 
-  def inicioBlock(self):
+  def genBlock(self):
     self.stdout   +=  '\n# início\n'
-    self.index    += 1
-    token         = self.tokens[self.index]
-    match token.type:
-      case TokenTypes.fim: self.stdout += '\n# fim\n'
+    self.index    +=  1
+    while True:
+      token = self.tokens[self.index]
+      match token.type:
+        case TokenTypes.fim:      
+          self.stdout += '# fim\n'
+          break
+        case TokenTypes.leia:     self.genLeia()
+        case TokenTypes.escreva:  self.genEscreva()
+
+
+  def genLeia(self):
+    self.index    +=  1
+    self.stdout   +=  f"{self.tokens[self.index].key} = input()\n"
+    self.index    +=  1
+    if (self.tokens[self.index].type == TokenTypes.dot):
+      while (self.tokens[self.index].type == TokenTypes.dot):
+        self.stdout +=  f"{self.tokens[self.index + 1].key} = input()\n"
+        self.index  +=  2
+
+  def genEscreva(self):
+    self.index    +=  1
+    self.stdout   +=  f"print({self.tokens[self.index].key}"
+    self.index    +=  1
+    if (self.tokens[self.index].type == TokenTypes.dot):
+      while (self.tokens[self.index].type == TokenTypes.dot):
+        self.stdout +=  f", {self.tokens[self.index + 1].key}"
+        self.index  +=  2
+    self.stdout   +=  ")\n"

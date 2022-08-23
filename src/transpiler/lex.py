@@ -7,6 +7,8 @@ class Lexer:
   line      =   1
   keyWords  =   [TokenKeys.programa,
                 TokenKeys.var,
+                TokenKeys.leia,
+                TokenKeys.escreva,
                 TokenKeys.caractere,
                 TokenKeys.real,
                 TokenKeys.inicio,

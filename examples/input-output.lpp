@@ -1,0 +1,12 @@
+programa EntradaSaida
+
+var
+  var1: caractere
+  var2: inteiro
+início
+  leia var1
+  escreva var1
+
+  leia var1, var2
+  escreva var1, var2
+fim
