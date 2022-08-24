@@ -6,11 +6,16 @@ let
     steam-run $(which bun) dev
   '';
 in
-  stdenv.mkDerivation {
-    name = "nix-server-environment";
-    
-    buildInputs = [
+  pkgs.mkShell {
+    name = "nix-lpp-environment";
+    version = "1.0.0";
+
+    nativeBuildInputs = [ 
+      bun
       script
+    ];
+
+    buildInputs = [
       python3
     ];
   }
