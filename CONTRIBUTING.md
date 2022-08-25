@@ -1,4 +1,4 @@
-# Contribuindo com LPPPY
+# Contribuindo com LPPPy
 
 Obrigado por querer contribuir com o projeto!
 

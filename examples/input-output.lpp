@@ -4,6 +4,7 @@ var
   var1: caractere
   var2: inteiro
 início
+  escreva "Entre var1: "
   leia var1
   escreva var1
 

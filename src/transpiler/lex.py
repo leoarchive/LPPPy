@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPP runtime distribution (https://github.com/fmleo/lpppy).
+# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -56,6 +56,19 @@ class Lexer:
     return      Token(key, TokenTypes.id, self.line)
 
   def lex_string(self):
+    start       = self.index
+    self.index += 1
+
+    while self.stdin[self.index] != '"':
+      self.index += 1
+      if (len(self.stdin) <= self.index): break
+
+    self.index += 1
+
+    key         = self.stdin[start:self.index]
+    return      Token(key, TokenTypes.str, self.line)
+
+  def lex_apha(self):
     start   =   self.index
     while self.stdin[self.index].isalpha() or self.stdin[self.index].isnumeric():
       self.index += 1
@@ -106,8 +119,12 @@ class Lexer:
       token   =   self.lex_dotwords()
       if (token): return token
 
-    if (key.isalpha()):
+    if (key == '"'):
       token   =   self.lex_string()
+      if (token): return token
+
+    if (key.isalpha()):
+      token   =   self.lex_apha()
       if (token): return token
 
     if (key.isnumeric()):

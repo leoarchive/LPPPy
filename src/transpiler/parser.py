@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPP runtime distribution (https://github.com/fmleo/lpppy).
+# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -100,11 +100,25 @@ class Parser:
   
   def parseEscreva(self, token):
     self.eatToken(token, TokenTypes.escreva)
-    self.eatToken(self.lexer.lex(), TokenTypes.id)
+
+    token = self.lexer.lex()
+    match token.type:
+      case TokenTypes.str:
+        self.eatToken(token, TokenTypes.str)
+      case TokenTypes.id:
+        self.eatToken(token, TokenTypes.id)
+
     token = self.lexer.lex()
     if (token.type == TokenTypes.dot):
       while token.type == TokenTypes.dot:
         self.eatToken(token, TokenTypes.dot)
-        self.eatToken(self.lexer.lex(), TokenTypes.id)
         token = self.lexer.lex()
+        match token.type:
+          case TokenTypes.str:
+            self.eatToken(token, TokenTypes.str)
+          case TokenTypes.id:
+            self.eatToken(token, TokenTypes.id)
+            
+        token = self.lexer.lex()
+
     return token
