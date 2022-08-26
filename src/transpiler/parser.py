@@ -28,9 +28,9 @@ class Parser:
   tokens  =   []
   ignore  =   [TokenTypes.programa, 
               TokenTypes.var, 
+              TokenTypes.lParen, 
+              TokenTypes.rParen, 
               TokenTypes.colon, 
-              TokenTypes.rSquare, 
-              TokenTypes.lSquare,
               TokenTypes.dPeriod,
               TokenTypes.de]
 
@@ -54,7 +54,7 @@ class Parser:
   def parseVarBlock(self, token):
     if (token.type == TokenTypes.inicio): 
       self.eatToken(token, TokenTypes.inicio)
-      return self.parseBlock()
+      return self.parseInicio()
     self.eatToken(token, TokenTypes.id)
 
     token = self.lexer.lex()
@@ -79,13 +79,117 @@ class Parser:
 
     self.parseVarBlock(self.lexer.lex())
    
-  def parseBlock(self):
+  def parseInicio(self):
+    token = self.lexer.lex()
+    while True:
+      print(token.key, token.type)
+      match token.type:
+        case TokenTypes.fim:      
+          print("AQUI")
+          return  self.eatToken(token, TokenTypes.fim) 
+        case TokenTypes.id:       token = self.parseId(token)
+        case TokenTypes.leia:     token = self.parseLeia(token)
+        case TokenTypes.escreva:  token = self.parseEscreva(token)
+        case TokenTypes.se:       token = self.parseSe(token)
+        case _:
+          raise Error(ErrorTypes.parser_unexpected_token, token)
+
+  def parseSeBlock(self):
     token = self.lexer.lex()
     while True:
       match token.type:
-        case TokenTypes.fim:      return  self.eatToken(token, TokenTypes.fim) 
+        case TokenTypes.senao:    return  token
+        case TokenTypes.fimse:    return  token
+        case TokenTypes.id:       token = self.parseId(token)
         case TokenTypes.leia:     token = self.parseLeia(token)
         case TokenTypes.escreva:  token = self.parseEscreva(token)
+        case TokenTypes.se:       token = self.parseSe(token)
+        case _:
+          raise Error(ErrorTypes.parser_unexpected_token, token)
+
+  def parseSe(self, token):
+    self.eatToken(token, TokenTypes.se)
+    self.eatToken(self.lexer.lex(), TokenTypes.lParen)
+
+    token = self.lexer.lex()
+    match token.type:
+      case TokenTypes.numb:
+        self.eatToken(token, TokenTypes.numb)
+      case TokenTypes.id:
+        self.eatToken(token, TokenTypes.id)
+      case TokenTypes.str:
+        self.eatToken(token, TokenTypes.str)
+
+    token = self.parseExp(self.lexer.lex())
+    self.eatToken(token, TokenTypes.rParen)
+    self.eatToken(self.lexer.lex(), TokenTypes.entao)
+
+    while token.type != TokenTypes.fimse:
+      token = self.parseSeBlock()
+      if (token.type == TokenTypes.entao):
+        self.eatToken(token, TokenTypes.entao)
+        
+    self.eatToken(token, TokenTypes.fimse)
+    return self.lexer.lex()
+
+  def parseId(self, token):
+    self.eatToken(token, TokenTypes.id)
+
+    token = self.lexer.lex()
+    if (token.type == TokenTypes.rArrow):
+      token = self.parseVarAssign(token)
+
+    return token
+    
+  def parseVarAssign(self, token):
+    self.eatToken(token, TokenTypes.rArrow)
+
+    token = self.lexer.lex()
+    match token.type:
+      case TokenTypes.numb:
+        self.eatToken(token, TokenTypes.numb)
+      case TokenTypes.id:
+        self.eatToken(token, TokenTypes.id)
+      case TokenTypes.str:
+        self.eatToken(token, TokenTypes.str)
+    
+    token = self.lexer.lex()
+    match token.type:
+      case TokenTypes.mathOps:
+        token = self.parseExp(token)
+      
+
+    return token
+
+  def parseExp(self, token):
+    match token.type:
+      case TokenTypes.logicalOps:
+        while token.type == TokenTypes.logicalOps:
+          self.eatToken(token, TokenTypes.logicalOps)
+
+          token = self.lexer.lex()
+          match token.type:
+            case TokenTypes.numb:
+              self.eatToken(token, TokenTypes.numb)
+            case TokenTypes.id:
+              self.eatToken(token, TokenTypes.id)
+              
+          token = self.lexer.lex()
+
+      case TokenTypes.mathOps:
+        while token.type == TokenTypes.mathOps:
+          self.eatToken(token, TokenTypes.mathOps)
+
+          token = self.lexer.lex()
+          match token.type:
+            case TokenTypes.numb:
+              self.eatToken(token, TokenTypes.numb)
+            case TokenTypes.id:
+              self.eatToken(token, TokenTypes.id)
+              
+          token = self.lexer.lex()
+
+    return token
 
   def parseLeia(self, token):
     self.eatToken(token, TokenTypes.leia)

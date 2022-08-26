@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from ast import NotEq
 from enum import Enum
 
 class TokenKeys():
@@ -24,8 +25,11 @@ class TokenKeys():
  inicio       =   'início'
  fim          =   'fim'
  conjunto     =   'conjunto'
+ entao        =   'então'
+ senao        =   'senão'
  dPeriod      =   '..'
  de           =   'de'
+ se           =   'se'
  inteiro      =   'inteiro'
  leia         =   'leia'
  escreva      =   'escreva'
@@ -35,6 +39,22 @@ class TokenKeys():
  rSquare      =   ']',
  lSquare      =   '['
  dot          =   ','
+ _and         =   '.E.'
+ _not         =   '.NÃO.'
+ _or          =   '.OU.'
+ graterEq     =   '>='
+ lessEq       =   '<='
+ less         =   '<'
+ grater       =   '>'
+ NotEq        =   '<>'
+ equal        =   '='
+ plus         =   '+'
+ minus        =   '-'
+ mult         =   '*'
+ div          =   '/'
+ rParen       =   ')'
+ lParen       =   '('
+ fimse        =   'fim_se'
 
 class TokenTypes(Enum):
   id          =   1
@@ -55,6 +75,14 @@ class TokenTypes(Enum):
   leia        =   16
   escreva     =   17
   str         =   18
+  logicalOps  =   19
+  mathOps     =   20
+  se          =   21
+  lParen      =   22
+  rParen      =   23
+  entao       =   24
+  fimse       =   25
+  senao       =   26
   
 class Token:
   key         =   ''
@@ -74,6 +102,10 @@ class Token:
       case 'leia':                return TokenTypes.leia
       case 'escreva':             return TokenTypes.escreva
       case 'fim':                 return TokenTypes.fim
+      case 'se':                  return TokenTypes.se
+      case 'então':               return TokenTypes.entao
+      case 'senão':               return TokenTypes.senao
+      case 'fim_se':              return TokenTypes.fimse
       case '←':                   return TokenTypes.rArrow
       case '→':                   return TokenTypes.lArrow
       case ':':                   return TokenTypes.colon
@@ -81,7 +113,13 @@ class Token:
       case ',':                   return TokenTypes.dot
       case ']':                   return TokenTypes.rSquare
       case '[':                   return TokenTypes.lSquare
+      case ')':                   return TokenTypes.rParen
+      case '(':                   return TokenTypes.lParen
       case 'de':                  return TokenTypes.de
       case 'caractere' | 'real' | 'inteiro' | 'conjunto':  
                                   return TokenTypes.dType
+      case '.E.' | '.OU.' | '.NÃO.' | '>' | '<' | '>=' | '<=' | '<>' | '=':  
+                                  return TokenTypes.logicalOps
+      case '+' | '-' | '*' | '/':
+                                  return TokenTypes.mathOps
       case _:                     return TokenTypes.id

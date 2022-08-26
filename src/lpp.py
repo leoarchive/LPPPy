@@ -21,7 +21,7 @@ class LPP:
   transpiler = None
 
   def __init__(self):
-    self.transpiler = Transpiler(Path('./examples/input-output.lpp').read_text())
+    self.transpiler = Transpiler(Path('./examples/conditionals.lpp').read_text())
     self.transpiler.run()
     print(self.transpiler.stdout)
 

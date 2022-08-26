@@ -32,9 +32,28 @@ class Lexer:
                 TokenKeys.conjunto,
                 TokenKeys.dPeriod,
                 TokenKeys.de,
-                TokenKeys.inteiro]
-  keyChars  =   [TokenKeys.rArrow,
+                TokenKeys.se,
+                TokenKeys.inteiro,
+                TokenKeys.entao,
+                TokenKeys.graterEq,
+                TokenKeys.lessEq,
+                TokenKeys.NotEq,
+                TokenKeys.fimse,
+                TokenKeys.senao,
+                TokenKeys._and,
+                TokenKeys._not,
+                TokenKeys._or]
+  keyChars  =   [TokenKeys.plus,
+                TokenKeys.minus,
+                TokenKeys.mult,
+                TokenKeys.div,
+                TokenKeys.grater,
+                TokenKeys.less,
+                TokenKeys.equal,
+                TokenKeys.rArrow,
                 TokenKeys.lArrow,
+                TokenKeys.rParen,
+                TokenKeys.lParen,
                 TokenKeys.colon,
                 TokenKeys.rSquare,
                 TokenKeys.dot,
@@ -45,13 +64,16 @@ class Lexer:
     self.stdin = stdin
 
   def lex_dotwords(self):
-    start   =   self.index
-    while self.stdin[self.index] == '.':
+    start       = self.index
+    self.index += 1
+
+    while self.stdin[self.index] != '.':
       self.index += 1
       if (len(self.stdin) <= self.index): break
 
-    key     =   self.stdin[start:self.index]
-    token   =   self.lex_keyword(key)
+    self.index += 1
+    key         = self.stdin[start:self.index]
+    token       = self.lex_keyword(key)
     if (token): return token
     return      Token(key, TokenTypes.id, self.line)
 
@@ -68,9 +90,9 @@ class Lexer:
     key         = self.stdin[start:self.index]
     return      Token(key, TokenTypes.str, self.line)
 
-  def lex_apha(self):
+  def lex_alpha(self):
     start   =   self.index
-    while self.stdin[self.index].isalpha() or self.stdin[self.index].isnumeric():
+    while self.isAlphaOrOP(self.stdin[self.index]) or self.stdin[self.index].isnumeric():
       self.index += 1
       if (len(self.stdin) <= self.index): break
 
@@ -106,6 +128,9 @@ class Lexer:
             self.line += 1
             break
 
+  def isAlphaOrOP(self, key):
+    return key.isalpha() or key == '=' or key == '<' or key == '>' or key == '_'
+
   def lex(self):
     if (len(self.stdin) <= self.index):
       raise Error(ErrorTypes.lexer_unexpected_token, {
@@ -123,8 +148,8 @@ class Lexer:
       token   =   self.lex_string()
       if (token): return token
 
-    if (key.isalpha()):
-      token   =   self.lex_apha()
+    if (self.isAlphaOrOP(key)):
+      token   =   self.lex_alpha()
       if (token): return token
 
     if (key.isnumeric()):
