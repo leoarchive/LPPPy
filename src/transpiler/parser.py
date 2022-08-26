@@ -82,11 +82,8 @@ class Parser:
   def parseInicio(self):
     token = self.lexer.lex()
     while True:
-      print(token.key, token.type)
       match token.type:
-        case TokenTypes.fim:      
-          print("AQUI")
-          return  self.eatToken(token, TokenTypes.fim) 
+        case TokenTypes.fim:      return  self.eatToken(token, TokenTypes.fim) 
         case TokenTypes.id:       token = self.parseId(token)
         case TokenTypes.leia:     token = self.parseLeia(token)
         case TokenTypes.escreva:  token = self.parseEscreva(token)
@@ -158,7 +155,6 @@ class Parser:
       case TokenTypes.mathOps:
         token = self.parseExp(token)
       
-
     return token
 
   def parseExp(self, token):
@@ -200,6 +196,7 @@ class Parser:
         self.eatToken(token, TokenTypes.dot)
         self.eatToken(self.lexer.lex(), TokenTypes.id)
         token = self.lexer.lex()
+
     return token
   
   def parseEscreva(self, token):

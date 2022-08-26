@@ -42,7 +42,6 @@ class CodeGen:
           case TokenKeys.real:      return "[0.0]" 
           case _:                   return "[]" 
 
-
   def gen(self):
     self.stdout   =   f'# programa {self.tokens[self.index].key}\n'
     self.stdout   +=  '# var\n'
@@ -100,7 +99,40 @@ class CodeGen:
           break
         case TokenTypes.leia:     self.genLeia()
         case TokenTypes.escreva:  self.genEscreva()
+        case TokenTypes.id:       self.genId()
+        case _:                   return print(f"NOT IMPLEMENTED YET: {token.type}\n")
 
+  def genVarAssign(self):
+    self.index    +=  1
+    self.stdout   += f" = {self.tokens[self.index].key}"
+
+    self.index    +=  1
+    match self.tokens[self.index].type:
+      case TokenTypes.mathOps:
+        self.genExp()
+
+  def genId(self):
+    self.stdout   += self.tokens[self.index].key
+    self.index    +=  1
+    if (self.tokens[self.index].type == TokenTypes.rArrow):
+      self.genVarAssign()
+
+  def genExp(self):
+    match self.tokens[self.index].type:
+      case TokenTypes.mathOps:
+        while self.tokens[self.index].type == TokenTypes.mathOps:
+          self.stdout   += f" {self.tokens[self.index].key} "
+
+          self.index    +=  1
+          match self.tokens[self.index].type:
+            case TokenTypes.numb:
+              self.stdout   += self.tokens[self.index].key
+            case TokenTypes.id:
+              self.stdout   += self.tokens[self.index].key
+              
+          self.index    +=  1
+    
+    self.stdout   += "\n"
 
   def genLeia(self):
     self.index    +=  1
