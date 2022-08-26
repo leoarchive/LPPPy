@@ -4,12 +4,12 @@ Obrigado por querer contribuir com o projeto!
 
 # Contribuindo
 ## Reporte um bug
-Os bugs são reportados na [página de issues do projeto](https://github.com/fmleo/lpppy/issues). Antes de abrir uma nova issue, certifique-se de que ela já não foi reportada anteriormente. Assim que seu problema for reportado ele será analisado por um contribuidor ou mantenedor do projeto. Se houver dúvidas sobre seu problema, responda o mais rápido possível.
+Os bugs são reportados na [página de issues do projeto](https://github.com/leozamboni/LPPPy/issues). Antes de abrir uma nova issue, certifique-se de que ela já não foi reportada anteriormente. Assim que seu problema for reportado ele será analisado por um contribuidor ou mantenedor do projeto. Se houver dúvidas sobre seu problema, responda o mais rápido possível.
 
 Reportar bugs e problemas é bem vindo e muito importante para o projeto!
 
 ## Perguntas
-Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você também pode enviar através da [página de issues](https://github.com/fmleo/lpppy/issues), através do [discord](https://discord.gg/FpmXy28Y) ou caso o projeto exploda entre em contato pelo servidor IRC irc.leonardo.moe em #main.
+Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você também pode enviar através da [página de issues](https://github.com/leozamboni/LPPPy/issues), através do [discord](https://discord.gg/FpmXy28Y) ou caso o projeto exploda entre em contato pelo servidor IRC irc.leonardo.moe em #main.
 
 ## Requisitar mudanças
 
