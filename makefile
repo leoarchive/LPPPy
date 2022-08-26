@@ -1,4 +1,10 @@
 PYTHON=python3
 
-test_transpiler:
-	$(PYTHON) src/lpp.py
+.conds:
+	$(PYTHON) src/lpp.py './examples/conds.lpp'
+
+.io:
+	$(PYTHON) src/lpp.py './examples/io.lpp'
+
+.vars:
+	$(PYTHON) src/lpp.py './examples/vars.lpp'
