@@ -14,15 +14,15 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from transpiler.main import Transpiler
-from pathlib import Path
+class Symtab:
+  symbols = []
 
-class LPP:
-  transpiler = None
+  def push(self, token, dtype):
+    self.symbols.append({
+      "token": token,
+      "dtype": dtype,
+    })
 
-  def __init__(self):
-    self.transpiler = Transpiler(Path('./examples/conditionals.lpp').read_text())
-    self.transpiler.run()
-    print(self.transpiler.stdout)
-
-LPP()
+  def getType(self, key):
+    for sym in self.symbols:
+      if (sym["token"].key == key): return sym["dtype"]

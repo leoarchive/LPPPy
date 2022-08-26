@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
+# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License 
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from transpiler.token import TokenKeys, TokenTypes
+from .token import TokenKeys, TokenTypes
 
 # Alguns tokens não são armazenados no array final de tokens (self.tokens),
 # no parser os tokens que são ignorados estão presentes no array 'ignore'.
@@ -22,9 +22,13 @@ from transpiler.token import TokenKeys, TokenTypes
 # Saber os tokens que são ignorados é necessários para iterar o array 'tokens'
 # e dar saida (stdout) ao seu respectivo código em linguagem python.
 class CodeGen:
+  symtab  =   None
   tokens  =   []
   index   =   0
   stdout  =   ''
+
+  def __init__(self, symtab):
+    self.symtab = symtab
 
   def run(self, tokens):
     self.tokens = tokens
@@ -32,15 +36,22 @@ class CodeGen:
 
   def getDType(self, key, _keytype):
     match key:
-      case 'caractere':             return "''" 
-      case 'inteiro':               return "0" 
-      case 'real':                  return "0.0" 
-      case 'conjunto':    
+      case TokenKeys.caractere:     return "''" 
+      case TokenKeys.inteiro:       return "0" 
+      case TokenKeys.real:          return "0.0" 
+      case TokenKeys.conjunto:    
         match _keytype:
           case TokenKeys.inteiro:   return "[0]" 
           case TokenKeys.caractere: return "['']" 
           case TokenKeys.real:      return "[0.0]" 
           case _:                   return "[]" 
+
+  def getInputCast(self, key):
+    type = self.symtab.getType(key)
+    match type:
+      case TokenKeys.caractere:     return "input()"
+      case TokenKeys.inteiro:       return "int(input())"
+      case TokenKeys.real:          return "float(input())"
 
   def gen(self):
     self.stdout   =   f'# programa {self.tokens[self.index].key}\n'
@@ -136,11 +147,11 @@ class CodeGen:
 
   def genLeia(self):
     self.index    +=  1
-    self.stdout   +=  f"{self.tokens[self.index].key} = input()\n"
+    self.stdout   +=  f"{self.tokens[self.index].key} = {self.getInputCast(self.tokens[self.index].key)}\n"
     self.index    +=  1
     if (self.tokens[self.index].type == TokenTypes.dot):
       while (self.tokens[self.index].type == TokenTypes.dot):
-        self.stdout +=  f"{self.tokens[self.index + 1].key} = input()\n"
+        self.stdout +=  f"{self.tokens[self.index + 1].key} = {self.getInputCast(self.tokens[self.index + 1].key)}\n"
         self.index  +=  2
 
   def genEscreva(self):

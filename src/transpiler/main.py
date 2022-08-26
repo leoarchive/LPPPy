@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
+# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -17,6 +17,7 @@
 from .lex import Lexer
 from .parser import Parser
 from .code import CodeGen
+from .symtab import Symtab
 
 class Transpiler:
   stdin     =   ''
@@ -24,13 +25,15 @@ class Transpiler:
   lexer     =   None 
   parser    =   None 
   codegen   =   None 
+  symtab    =   None 
   tokens    =   []
 
   def __init__(self, stdin):
     self.stdin    =   stdin
+    self.symtab   =   Symtab()
     self.lexer    =   Lexer(stdin)
-    self.parser   =   Parser(self.lexer)
-    self.codegen  =   CodeGen()
+    self.parser   =   Parser(self.lexer, self.symtab)
+    self.codegen  =   CodeGen(self.symtab)
 
   def run(self):
     self.parser.run()

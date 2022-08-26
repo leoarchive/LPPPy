@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
+# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -25,6 +25,7 @@ from .token import TokenKeys, TokenTypes
 class Parser:
   token   =   None
   lexer   =   None
+  symtab  =   None
   tokens  =   []
   ignore  =   [TokenTypes.programa, 
               TokenTypes.var, 
@@ -34,7 +35,9 @@ class Parser:
               TokenTypes.dPeriod,
               TokenTypes.de]
 
-  def __init__(self, lexer):  self.lexer = lexer
+  def __init__(self, lexer, symtab):  
+    self.lexer  = lexer
+    self.symtab = symtab
 
   def run(self):              self.parse()
 
@@ -55,18 +58,27 @@ class Parser:
     if (token.type == TokenTypes.inicio): 
       self.eatToken(token, TokenTypes.inicio)
       return self.parseInicio()
+
     self.eatToken(token, TokenTypes.id)
+
+    _symtokens = []
+    _symtokens.append(token)
 
     token = self.lexer.lex()
     if (token.type == TokenTypes.dot):
       while token.type == TokenTypes.dot:
         self.eatToken(token, TokenTypes.dot)
-        self.eatToken(self.lexer.lex(), TokenTypes.id)
+        token = self.lexer.lex()
+        _symtokens.append(token)
+        self.eatToken(token, TokenTypes.id)
         token = self.lexer.lex()
 
     self.eatToken(token, TokenTypes.colon)
 
+    _symtype = 0
+
     token = self.lexer.lex()
+    _symtype = token.key
     self.eatToken(token, TokenTypes.dType)
     if (token.key == TokenKeys.conjunto):
       self.eatToken(self.lexer.lex(), TokenTypes.lSquare)
@@ -75,7 +87,12 @@ class Parser:
       self.eatToken(self.lexer.lex(), TokenTypes.numb)
       self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
       self.eatToken(self.lexer.lex(), TokenTypes.de)
-      self.eatToken(self.lexer.lex(), TokenTypes.dType)
+      token = self.lexer.lex()
+      _symtype = token.key
+      self.eatToken(token, TokenTypes.dType)
+
+    for _token in _symtokens:
+      self.symtab.push(_token, _symtype)
 
     self.parseVarBlock(self.lexer.lex())
    
