@@ -1,5 +1,5 @@
 # 
-# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
+# This file is part of the LPPPy distribution (https://github.com/fmleo/lpppy).
 # Copyright (c) 2022 IFRS - Campus Vacaria.
 # 
 # This program is free software: you can redistribute it and/or modify  
@@ -16,12 +16,13 @@
 #
 from transpiler.main import Transpiler
 from pathlib import Path
+import sys
 
 class LPP:
   transpiler = None
 
   def __init__(self):
-    self.transpiler = Transpiler(Path('./examples/conditionals.lpp').read_text())
+    self.transpiler = Transpiler(Path(sys.argv[1]).read_text())
     self.transpiler.run()
     print(self.transpiler.stdout)
 

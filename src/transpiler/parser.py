@@ -29,8 +29,6 @@ class Parser:
   tokens  =   []
   ignore  =   [TokenTypes.programa, 
               TokenTypes.var, 
-              TokenTypes.lParen, 
-              TokenTypes.rParen, 
               TokenTypes.colon, 
               TokenTypes.dPeriod,
               TokenTypes.de]
@@ -112,8 +110,8 @@ class Parser:
     token = self.lexer.lex()
     while True:
       match token.type:
-        case TokenTypes.senao:    return  token
-        case TokenTypes.fimse:    return  token
+        case TokenTypes.fimse | TokenTypes.senao:    
+                                  return  token
         case TokenTypes.id:       token = self.parseId(token)
         case TokenTypes.leia:     token = self.parseLeia(token)
         case TokenTypes.escreva:  token = self.parseEscreva(token)
@@ -140,8 +138,8 @@ class Parser:
 
     while token.type != TokenTypes.fimse:
       token = self.parseSeBlock()
-      if (token.type == TokenTypes.entao):
-        self.eatToken(token, TokenTypes.entao)
+      if (token.type == TokenTypes.senao):
+        self.eatToken(token, TokenTypes.senao)
         
     self.eatToken(token, TokenTypes.fimse)
     return self.lexer.lex()
