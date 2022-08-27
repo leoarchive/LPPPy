@@ -19,10 +19,22 @@ Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você
 - Se esforce para que tenha uma mensagem de commit decente;
 - Abra um pull request e resolva qualquer comentário/dúvida que possa ser feita por um contribuidor ou mantenedor do projeto.
 	
+## Buildando
+
+Utilizando nix package:
+```
+nix-shell -p nix/shell.nix;
+make clean;
+build;
+```
+
+build é um script que utiliza cython e gcc para gerar o binário estático. 
+
 ## Convenções de código
 
 - Todo arquivo deve ser licenciado e conter o header com instruções da licença GPL 3 (pode ser copiado de um arquivo já existente);
 - Todo o código deve ser escrito em inglês, salva exceções para nomes referente a palavras reservadas da sintaxe do LPP (```programa```, ```início```, ```fim```, …).
+- Todo arquivo deve ser formatado utilizando black
 
 ## Licença de contribuições
 
