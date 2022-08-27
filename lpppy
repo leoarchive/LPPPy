@@ -4,4 +4,9 @@ LPPPY=src/lpppy
 PYTHON=python
 
 $LPPPY $1
-$PYTHON build/source.py
+
+if [ $? -eq 0 ]
+then
+  $PYTHON build/source.py
+fi
+
