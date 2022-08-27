@@ -34,10 +34,10 @@ class TokenKeys:
     inteiro = "inteiro"
     leia = "leia"
     escreva = "escreva"
-    rArrow = ("←",)
-    lArrow = ("→",)
-    colon = (":",)
-    rSquare = ("]",)
+    rArrow = "←"
+    lArrow = "→"
+    colon = ":"
+    rSquare = "]"
     lSquare = "["
     dot = ","
     _and = ".E."
@@ -99,52 +99,71 @@ class Token:
         self.line = line
 
     def getType(key):
-        match key:
-            case "var":
-                return TokenTypes.var
-            case "programa":
-                return TokenTypes.programa
-            case "início":
-                return TokenTypes.inicio
-            case "leia":
-                return TokenTypes.leia
-            case "escreva":
-                return TokenTypes.escreva
-            case "fim":
-                return TokenTypes.fim
-            case "se":
-                return TokenTypes.se
-            case "então":
-                return TokenTypes.entao
-            case "senão":
-                return TokenTypes.senao
-            case "fim_se":
-                return TokenTypes.fimse
-            case "←":
-                return TokenTypes.rArrow
-            case "→":
-                return TokenTypes.lArrow
-            case ":":
-                return TokenTypes.colon
-            case "..":
-                return TokenTypes.dPeriod
-            case ",":
-                return TokenTypes.dot
-            case "]":
-                return TokenTypes.rSquare
-            case "[":
-                return TokenTypes.lSquare
-            case ")":
-                return TokenTypes.rParen
-            case "(":
-                return TokenTypes.lParen
-            case "de":
-                return TokenTypes.de
-            case "caractere" | "real" | "inteiro" | "conjunto":
-                return TokenTypes.dType
-            case ".E." | ".OU." | ".NÃO." | ">" | "<" | ">=" | "<=" | "<>" | "=":
-                return TokenTypes.logicalOps
-            case "+" | "-" | "*" | "/":
-                return TokenTypes.mathOps
-            case _:
-                return TokenTypes.id
+        if key == TokenKeys.var:
+            return TokenTypes.var
+        elif key == TokenKeys.programa:
+            return TokenTypes.programa
+        elif key == TokenKeys.inicio:
+            return TokenTypes.inicio
+        elif key == TokenKeys.leia:
+            return TokenTypes.leia
+        elif key == TokenKeys.escreva:
+            return TokenTypes.escreva
+        elif key == TokenKeys.fim:
+            return TokenTypes.fim
+        elif key == TokenKeys.se:
+            return TokenTypes.se
+        elif key == TokenKeys.entao:
+            return TokenTypes.entao
+        elif key == TokenKeys.senao:
+            return TokenTypes.senao
+        elif key == TokenKeys.fimse:
+            return TokenTypes.fimse
+        elif key == TokenKeys.rArrow:
+            return TokenTypes.rArrow
+        elif key == TokenKeys.lArrow:
+            return TokenTypes.lArrow
+        elif key == TokenKeys.colon:
+            return TokenTypes.colon
+        elif key == TokenKeys.dPeriod:
+            return TokenTypes.dPeriod
+        elif key == TokenKeys.dot:
+            return TokenTypes.dot
+        elif key == TokenKeys.rSquare:
+            return TokenTypes.rSquare
+        elif key == TokenKeys.lSquare:
+            return TokenTypes.lSquare
+        elif key == TokenKeys.rParen:
+            return TokenTypes.rParen
+        elif key == TokenKeys.lParen:
+            return TokenTypes.lParen
+        elif key == TokenKeys.de:
+            return TokenTypes.de
+        elif (
+            key == TokenKeys.caractere
+            or key == TokenKeys.real
+            or key == TokenKeys.inteiro
+            or key == TokenKeys.conjunto
+        ):
+            return TokenTypes.dType
+        elif (
+            key == TokenKeys._and
+            or key == TokenKeys._or
+            or key == TokenKeys._not
+            or key == TokenKeys.grater
+            or key == TokenKeys.graterEq
+            or key == TokenKeys.less
+            or key == TokenKeys.lessEq
+            or key == TokenKeys.NotEq
+            or key == TokenKeys.equal
+        ):
+            return TokenTypes.logicalOps
+        elif (
+            key == TokenKeys.plus
+            or key == TokenKeys.minus
+            or key == TokenKeys.mult
+            or key == TokenKeys.div
+        ):
+            return TokenTypes.mathOps
+        else:
+            return TokenTypes.id

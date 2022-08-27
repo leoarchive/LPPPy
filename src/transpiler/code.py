@@ -36,49 +36,44 @@ class CodeGen:
         self.gen()
 
     def getDType(self, key, _keytype):
-        match key:
-            case TokenKeys.caractere:
-                return "''"
-            case TokenKeys.inteiro:
-                return "0"
-            case TokenKeys.real:
-                return "0.0"
-            case TokenKeys.conjunto:
-                match _keytype:
-                    case TokenKeys.inteiro:
-                        return "[0]"
-                    case TokenKeys.caractere:
-                        return "['']"
-                    case TokenKeys.real:
-                        return "[0.0]"
-                    case _:
-                        return "[]"
+        if key == TokenKeys.caractere:
+            return "''"
+        elif key == TokenKeys.inteiro:
+            return "0"
+        elif key == TokenKeys.real:
+            return "0.0"
+        elif key == TokenKeys.conjunto:
+            if _keytype == TokenKeys.caractere:
+                return "['']"
+            elif _keytype == TokenKeys.inteiro:
+                return "[0]"
+            elif _keytype == TokenKeys.real:
+                return "[0.0]"
+            else:
+                return "[]"
 
     def getInputCast(self, key):
         type = self.symtab.getType(key)
-
-        match type:
-            case TokenKeys.caractere:
-                return "input()"
-            case TokenKeys.inteiro:
-                return "int(input())"
-            case TokenKeys.real:
-                return "float(input())"
+        if type == TokenKeys.caractere:
+            return "input()"
+        elif type == TokenKeys.inteiro:
+            return "int(input())"
+        elif type == TokenKeys.real:
+            return "float(input())"
 
     def getLogical(self, key):
-        match key:
-            case TokenKeys._and:
-                return "and"
-            case TokenKeys._not:
-                return "not"
-            case TokenKeys._or:
-                return "or"
-            case TokenKeys.NotEq:
-                return "!="
-            case TokenKeys.equal:
-                return "=="
-            case _:
-                return key
+        if key == TokenKeys._and:
+            return "and"
+        elif key == TokenKeys._not:
+            return "not"
+        elif key == TokenKeys._or:
+            return "or"
+        elif key == TokenKeys.NotEq:
+            return "!="
+        elif key == TokenKeys.equal:
+            return "=="
+        else:
+            return key
 
     def gen(self):
         self.stdout = f"# programa {self.tokens[self.index].key}\n"
@@ -142,40 +137,40 @@ class CodeGen:
         self.index += 1
         while True:
             token = self.tokens[self.index]
-            match token.type:
-                case TokenTypes.fim:
-                    self.stdout += "# fim\n"
-                    break
-                case TokenTypes.leia:
-                    self.genLeia()
-                case TokenTypes.escreva:
-                    self.genEscreva()
-                case TokenTypes.id:
-                    self.genId()
-                case TokenTypes.se:
-                    self.genSe()
-                case _:
-                    return print(f"NOT IMPLEMENTED YET: {token.type}\n")
+            if token.type == TokenTypes.fim:
+                self.stdout += "# fim\n"
+                break
+            elif token.type == TokenTypes.leia:
+                self.genLeia()
+            elif token.type == TokenTypes.escreva:
+                self.genEscreva()
+            elif token.type == TokenTypes.id:
+                self.genId()
+            elif token.type == TokenTypes.se:
+                self.genSe()
+            else:
+                print(f"NOT IMPLEMENTED YET: {token.type}\n")
+                return 
 
     def genSeBLock(self):
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
             self.stdout += "\t"
-            match token.type:
-                case TokenTypes.fimse | TokenTypes.senao:
-                    self.stdout = self.stdout[:-1]
-                    break
-                case TokenTypes.leia:
-                    self.genLeia()
-                case TokenTypes.escreva:
-                    self.genEscreva()
-                case TokenTypes.id:
-                    self.genId()
-                case TokenTypes.se:
-                    self.genSe()
-                case _:
-                    return print(f"NOT IMPLEMENTED YET: {token.type}\n")
+            if token.type == TokenTypes.fimse or token.type == TokenTypes.senao:
+                self.stdout = self.stdout[:-1]
+                break
+            elif token.type == TokenTypes.leia:
+                self.genLeia()
+            elif token.type == TokenTypes.escreva:
+                self.genEscreva()
+            elif token.type == TokenTypes.id:
+                self.genId()
+            elif token.type == TokenTypes.se:
+                self.genSe()
+            else:
+                print(f"NOT IMPLEMENTED YET: {token.type}\n")
+                return
 
     def genSe(self):
         self.stdout += "if "
@@ -202,9 +197,8 @@ class CodeGen:
         self.stdout += f" = {self.tokens[self.index].key}"
 
         self.index += 1
-        match self.tokens[self.index].type:
-            case TokenTypes.mathOps:
-                self.genExp()
+        if self.tokens[self.index].type == TokenTypes.mathOps:
+            self.genExp()
 
         self.stdout += "\n"
 
@@ -215,32 +209,29 @@ class CodeGen:
             self.genVarAssign()
 
     def genExp(self):
-        match self.tokens[self.index].type:
-            case TokenTypes.logicalOps:
-                while self.tokens[self.index].type == TokenTypes.logicalOps:
-                    self.stdout += f" {self.getLogical(self.tokens[self.index].key)} "
+        if self.tokens[self.index].type == TokenTypes.logicalOps:
+            while self.tokens[self.index].type == TokenTypes.logicalOps:
+                self.stdout += f" {self.getLogical(self.tokens[self.index].key)} "
 
-                    self.index += 1
-                    match self.tokens[self.index].type:
-                        case TokenTypes.numb:
-                            self.stdout += self.tokens[self.index].key
-                        case TokenTypes.id:
-                            self.stdout += self.tokens[self.index].key
+                self.index += 1
+                if self.tokens[self.index].type == TokenTypes.numb:
+                    self.stdout += self.tokens[self.index].key
+                elif self.tokens[self.index].type == TokenTypes.id:
+                    self.stdout += self.tokens[self.index].key
 
-                    self.index += 1
+                self.index += 1
 
-            case TokenTypes.mathOps:
-                while self.tokens[self.index].type == TokenTypes.mathOps:
-                    self.stdout += f" {self.tokens[self.index].key} "
+        elif self.tokens[self.index].type == TokenTypes.mathOps:
+            while self.tokens[self.index].type == TokenTypes.mathOps:
+                self.stdout += f" {self.tokens[self.index].key} "
 
-                    self.index += 1
-                    match self.tokens[self.index].type:
-                        case TokenTypes.numb:
-                            self.stdout += self.tokens[self.index].key
-                        case TokenTypes.id:
-                            self.stdout += self.tokens[self.index].key
+                self.index += 1
+                if self.tokens[self.index].type == TokenTypes.numb:
+                    self.stdout += self.tokens[self.index].key
+                elif self.tokens[self.index].type == TokenTypes.id:
+                    self.stdout += self.tokens[self.index].key
 
-                    self.index += 1
+                self.index += 1
 
     def genLeia(self):
         self.index += 1

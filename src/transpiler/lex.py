@@ -137,10 +137,9 @@ class Lexer:
     def lex_chars(self, key):
         for char in self.chars:
             if key == char:
-                match key:
-                    case "\n":
-                        self.line += 1
-                        break
+                if key == "\n":
+                    self.line += 1
+                    break
 
     def isAlphaOrOP(self, key):
         return key.isalpha() or key == "=" or key == "<" or key == ">" or key == "_"

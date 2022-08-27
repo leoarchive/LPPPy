@@ -33,8 +33,7 @@ class Error:
         )
 
     def getMsg(self, type):
-        match type:
-            case ErrorTypes.lexer_unexpected_token:
-                return "lexer: token inesperado"
-            case ErrorTypes.parser_unexpected_token:
-                return "parser: token inesperado"
+        if type == ErrorTypes.lexer_unexpected_token:
+            return "lexer: token inesperado"
+        elif type == ErrorTypes.parser_unexpected_token:
+            return "parser: token inesperado"

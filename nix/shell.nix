@@ -9,9 +9,11 @@ let
   ''
   PYTHONLIBVER=python$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')$(python3-config --abiflags)
 
-  cython src/lpp.py --embed
-
-  gcc -Os $(python3-config --includes) src/lpp.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
+  cython -3 src/transpiler/*.py
+  cython -3 src/lpp.py --embed
+  rm src/transpiler/__init__.c
+ 
+  gcc -Os $(python3-config --includes) src/lpp.c src/transpiler/*.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
   '';
 in
   pkgs.mkShell {
