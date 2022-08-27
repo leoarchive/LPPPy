@@ -29,7 +29,7 @@ in
     ];
 
     buildInputs = [
-      python27
+      python310
     ];
   }
  
