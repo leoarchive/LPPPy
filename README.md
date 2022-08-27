@@ -14,6 +14,12 @@ bash ./lpppy examples/hello.lpp;
 
 ## Como usar
 
+Basta utilizar o comando ```lpppy``` e apontar o código fonte:
+```
+lpppy source.lpp 
+```
+Se tudo ocorrer corretamente será gerado uma pasta ```build``` com o arquivo traduzido que será executado. 
+
 ## Como contribuir 
 
 Leia o [guia de contribuição](https://github.com/leozamboni/LPPPy/blob/main/CONTRIBUTING.md) para saber mais.
