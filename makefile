@@ -1,10 +1,15 @@
 PYTHON=python3
 
-.conds:
+conds: 
 	$(PYTHON) src/lpp.py './examples/conds.lpp'
 
-.io:
+io: 
 	$(PYTHON) src/lpp.py './examples/io.lpp'
 
-.vars:
+vars: 
 	$(PYTHON) src/lpp.py './examples/vars.lpp'
+
+clean: 
+	rm -rf build
+	rm src/lpp.c
+	rm src/lpppy

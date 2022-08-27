@@ -1,9 +1,17 @@
 with import <nixpkgs> {};
 
 let
-  script = pkgs.writeShellScriptBin "start" 
+  startScript = pkgs.writeShellScriptBin "start" 
   ''
     steam-run $(which bun) dev
+  '';
+  buildScript = pkgs.writeShellScriptBin "build" 
+  ''
+  PYTHONLIBVER=python$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')$(python3-config --abiflags)
+
+  cython src/lpp.py --embed
+
+  gcc -Os $(python3-config --includes) src/lpp.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
   '';
 in
   pkgs.mkShell {
@@ -12,7 +20,12 @@ in
 
     nativeBuildInputs = [ 
       bun
-      script
+
+      python310Packages.black
+      python310Packages.cython
+      
+      startScript
+      buildScript
     ];
 
     buildInputs = [
