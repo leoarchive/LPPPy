@@ -1,4 +1,4 @@
-programa Olá
+programa OláMundo
 var
 início
   escreva "Olá, mundo!"
