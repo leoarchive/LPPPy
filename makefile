@@ -13,4 +13,3 @@ clean:
 	rm -rf build
 	rm src/*.c
 	rm src/transpiler/*.c
-	rm src/lpppy
