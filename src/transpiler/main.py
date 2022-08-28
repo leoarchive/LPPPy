@@ -42,7 +42,6 @@ class Transpiler:
         self.codegen.run(self.parser.tokens)
         header = """# +-------------------------------------------------------+
 # \tGerado por LPPPy (https://github.com/leozamboni/LPPPy).
-# \t*Não edite esse arquivo.
 # \t\t\t\t\t┌─────────────┬─────────────────────┐
 # \t\t\t\t\t│ Comp. date  │ %s │
 # \t\t\t\t\t├─────────────┼─────────────────────┤

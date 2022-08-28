@@ -2,11 +2,12 @@
 
 LPPPY=src/lpppy
 PYTHON=python
+FILE="$(basename -- $1)"
 
 $LPPPY $1
 
 if [ $? -eq 0 ]
 then
-  $PYTHON build/source.py
+  $PYTHON build/${FILE%.*}.py
 fi
 
