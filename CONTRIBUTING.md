@@ -23,8 +23,7 @@ Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você
 
 Utilizando nix package:
 ```
-nix-shell -p nix/shell.nix;
-make clean;
+nix-shell nix/shell.nix;
 build;
 ```
 
