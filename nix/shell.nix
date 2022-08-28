@@ -14,6 +14,8 @@ let
   rm src/transpiler/__init__.c
  
   gcc -Os $(python3-config --includes) src/lpp.c src/transpiler/*.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
+
+  make clean
   '';
 in
   pkgs.mkShell {
