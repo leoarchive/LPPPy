@@ -46,15 +46,15 @@ class Lexer:
         TokenKeys._and,
         TokenKeys._not,
         TokenKeys._or,
-    ]
-    keyChars = [
-        TokenKeys.plus,
-        TokenKeys.minus,
-        TokenKeys.mult,
-        TokenKeys.div,
         TokenKeys.grater,
         TokenKeys.less,
         TokenKeys.equal,
+    ]
+    keyChars = [
+        TokenKeys.minus,
+        TokenKeys.plus,
+        TokenKeys.mult,
+        TokenKeys.div,
         TokenKeys.rArrow,
         TokenKeys.lArrow,
         TokenKeys.rParen,
