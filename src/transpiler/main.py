@@ -18,9 +18,11 @@ from .lex import Lexer
 from .parser import Parser
 from .code import CodeGen
 from .symtab import Symtab
-
+import timeit
+from datetime import datetime
 
 class Transpiler:
+    startTime = timeit.default_timer()
     stdin = ""
     stdout = ""
     lexer = None
@@ -38,4 +40,14 @@ class Transpiler:
     def run(self):
         self.parser.run()
         self.codegen.run(self.parser.tokens)
-        self.stdout = self.codegen.stdout
+        header = """# +-------------------------------------------------------+
+# \tGerado por LPPPy (https://github.com/leozamboni/LPPPy).
+# \t*Não edite esse arquivo.
+# \t\t\t\t\t┌─────────────┬─────────────────────┐
+# \t\t\t\t\t│ Comp. date  │ %s │
+# \t\t\t\t\t├─────────────┼─────────────────────┤
+# \t\t\t\t\t│ Comp. time  │ %.10f s.     │
+# \t\t\t\t\t└─────────────┴─────────────────────┘
+# +-------------------------------------------------------+
+"""% (datetime.today().strftime('%d/%m/%Y %H:%M:%S'), timeit.default_timer() - self.startTime)
+        self.stdout = header + self.codegen.stdout

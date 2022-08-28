@@ -191,6 +191,7 @@ class CodeGen:
                 self.genSeBLock()
 
         self.index += 1
+        self.stdout += "\n"
 
     def genVarAssign(self):
         self.index += 1
@@ -241,6 +242,8 @@ class CodeGen:
             while self.tokens[self.index].type == TokenTypes.dot:
                 self.stdout += f"{self.tokens[self.index + 1].key} = {self.getInputCast(self.tokens[self.index + 1].key)}\n"
                 self.index += 2
+
+        self.stdout += "\n"
 
     def genEscreva(self):
         self.index += 1
