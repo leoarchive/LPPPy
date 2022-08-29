@@ -13,7 +13,7 @@ let
   cython -3 src/lpp.py --embed
   rm src/transpiler/__init__.c
  
-  gcc -Os $(python3-config --includes) src/lpp.c src/transpiler/*.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
+  clang -Os $(python3-config --includes) src/lpp.c src/transpiler/*.c -o src/lpppy $(python3-config --ldflags) -l$PYTHONLIBVER
 
   make clean
   '';
@@ -23,6 +23,7 @@ in
     version = "1.0.0";
 
     nativeBuildInputs = [ 
+      clang
       bun
 
       python310Packages.black

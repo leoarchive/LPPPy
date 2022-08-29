@@ -27,7 +27,7 @@ nix-shell nix/shell.nix;
 build;
 ```
 
-build é um script que utiliza cython e gcc para gerar o binário estático. 
+build é um script que utiliza cython e clang para gerar o binário estático. 
 
 ## Convenções de código
 
