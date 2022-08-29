@@ -1,6 +1,6 @@
 #
 # This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 IFRS - Campus Vacaria.
+# Copyright (c) 2022 Leonardo Z. N.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
