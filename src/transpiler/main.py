@@ -1,6 +1,6 @@
 #
 # This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 IFRS - Campus Vacaria.
+# Copyright (c) 2022 Leonardo Z. N.
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -41,12 +41,12 @@ class Transpiler:
         self.parser.run()
         self.codegen.run(self.parser.tokens)
         header = """# +-------------------------------------------------------+
-# \tGerado por LPPPy (https://github.com/leozamboni/LPPPy).
-# \t\t\t\t\t┌─────────────┬─────────────────────┐
-# \t\t\t\t\t│ Comp. date  │ %s │
-# \t\t\t\t\t├─────────────┼─────────────────────┤
-# \t\t\t\t\t│ Comp. time  │ %.10f s.     │
-# \t\t\t\t\t└─────────────┴─────────────────────┘
+#  Gerado por LPPPy (https://github.com/leozamboni/LPPPy).
+#           ┌─────────────┬─────────────────────┐
+#           │ Comp. date  │ %s │
+#           ├─────────────┼─────────────────────┤
+#           │ Comp. time  │ %.10f s.     │
+#           └─────────────┴─────────────────────┘
 # +-------------------------------------------------------+
 """% (datetime.today().strftime('%d/%m/%Y %H:%M:%S'), timeit.default_timer() - self.startTime)
         self.stdout = header + self.codegen.stdout
