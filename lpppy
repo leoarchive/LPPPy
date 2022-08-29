@@ -1,7 +1,7 @@
 #!/bin/bash
 
 LPPPY=src/lpppy
-PYTHON=python
+PYTHON=python3
 FILE="$(basename -- $1)"
 
 $LPPPY $1
