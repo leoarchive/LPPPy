@@ -40,7 +40,8 @@ class Transpiler:
     def run(self):
         self.parser.run()
         self.codegen.run(self.parser.tokens)
-        header = """# +-------------------------------------------------------+
+        header = """# coding: utf-8
+# +-------------------------------------------------------+
 #  Gerado por LPPPy (https://github.com/leozamboni/LPPPy).
 #           ┌─────────────┬─────────────────────┐
 #           │ Comp. date  │ %s │
