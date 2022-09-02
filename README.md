@@ -8,7 +8,7 @@ LPP (linguagem de projeto de programação) é uma linguagem de projeto criada p
 ```
 git clone github.com/leozamboni/LPPPy;
 sudo chmod +x lpppy;
-PATH=$PATH:$PWD;
+export PATH=$PATH:$PWD;
 bash ./lpppy examples/hello.lpp;
 ```
 
