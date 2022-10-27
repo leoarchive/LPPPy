@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from ast import NotEq
 from enum import Enum
 
 
@@ -39,7 +38,7 @@ class TokenKeys:
     colon = ":"
     rSquare = "]"
     lSquare = "["
-    dot = ","
+    comma = ","
     _and = ".E."
     _not = ".NÃO."
     _or = ".OU."
@@ -56,6 +55,11 @@ class TokenKeys:
     rParen = ")"
     lParen = "("
     fimse = "fim_se"
+    para = "para"
+    fimpara = "fim_para"
+    ate = "até"
+    passo = "passo"
+    faca = "faça"
 
 
 class TokenTypes(Enum):
@@ -73,7 +77,7 @@ class TokenTypes(Enum):
     lSquare = 12
     dPeriod = 13
     de = 14
-    dot = 15
+    comma = 15
     leia = 16
     escreva = 17
     str = 18
@@ -86,6 +90,11 @@ class TokenTypes(Enum):
     fimse = 25
     senao = 26
     conjunto = 27
+    para = 28
+    fimpara = 29
+    ate = 30
+    passo = 31
+    faca = 32
 
 
 class Token:
@@ -127,8 +136,8 @@ class Token:
             return TokenTypes.colon
         elif key == TokenKeys.dPeriod:
             return TokenTypes.dPeriod
-        elif key == TokenKeys.dot:
-            return TokenTypes.dot
+        elif key == TokenKeys.comma:
+            return TokenTypes.comma
         elif key == TokenKeys.rSquare:
             return TokenTypes.rSquare
         elif key == TokenKeys.lSquare:
@@ -139,6 +148,16 @@ class Token:
             return TokenTypes.lParen
         elif key == TokenKeys.de:
             return TokenTypes.de
+        elif key == TokenKeys.para:
+            return TokenTypes.para
+        elif key == TokenKeys.fimpara:
+            return TokenTypes.fimpara
+        elif key == TokenKeys.ate:
+            return TokenTypes.ate
+        elif key == TokenKeys.passo:
+            return TokenTypes.passo
+        elif key == TokenKeys.faca:
+            return TokenTypes.faca
         elif (
             key == TokenKeys.caractere
             or key == TokenKeys.real

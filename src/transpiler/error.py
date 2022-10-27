@@ -21,6 +21,7 @@ from enum import Enum
 class ErrorTypes(Enum):
     lexer_unexpected_token = 1
     parser_unexpected_token = 2
+    code_internal_error_not_implemented_yet = 3
 
 
 class Error:
@@ -28,12 +29,14 @@ class Error:
         if not token:
             exit()
         print(
-            f"{self.getMsg(type)} '{token.key}' na linha {token.line}\n",
+            f"{self.getMsg(type)} '{token.key}' na linha {token.line};\nSinta-se livre para reportar ou tirar dúvidas em https://github.com/leozamboni/LPPPy/issues.\n",
             file=sys.stderr,
         )
 
     def getMsg(self, type):
         if type == ErrorTypes.lexer_unexpected_token:
-            return "lexer: token inesperado"
+            return "LEXER: token inesperado"
         elif type == ErrorTypes.parser_unexpected_token:
-            return "parser: token inesperado"
+            return "PARSER: token inesperado"
+        elif type == ErrorTypes.code_internal_error_not_implemented_yet:
+            return "CODE(erro interno): funcionalidade ainda não implementada"

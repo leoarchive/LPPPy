@@ -49,6 +49,11 @@ class Lexer:
         TokenKeys.grater,
         TokenKeys.less,
         TokenKeys.equal,
+        TokenKeys.para,
+        TokenKeys.fimpara,
+        TokenKeys.ate,
+        TokenKeys.passo,
+        TokenKeys.faca,
     ]
     keyChars = [
         TokenKeys.minus,
@@ -61,7 +66,7 @@ class Lexer:
         TokenKeys.lParen,
         TokenKeys.colon,
         TokenKeys.rSquare,
-        TokenKeys.dot,
+        TokenKeys.comma,
         TokenKeys.lSquare,
     ]
     chars = ["\n"]

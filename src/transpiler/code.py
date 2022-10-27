@@ -15,6 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 from .token import TokenKeys, TokenTypes
+from .error import Error, ErrorTypes
 
 # Alguns tokens não são armazenados no array final de tokens (self.tokens),
 # no parser os tokens que são ignorados estão presentes no array 'ignore'.
@@ -26,6 +27,7 @@ class CodeGen:
     tokens = []
     index = 0
     stdout = ""
+    level = 0
 
     def __init__(self, symtab):
         self.symtab = symtab
@@ -35,7 +37,7 @@ class CodeGen:
 
         self.gen()
 
-    def getDType(self, key, _keytype):
+    def getDType(self, key, size, _keytype):
         if key == TokenKeys.caractere:
             return "''"
         elif key == TokenKeys.inteiro:
@@ -44,13 +46,17 @@ class CodeGen:
             return "0.0"
         elif key == TokenKeys.conjunto:
             if _keytype == TokenKeys.caractere:
-                return "['']"
+                if size: return f"[''] * {size}"
+                else: return "['']"
             elif _keytype == TokenKeys.inteiro:
-                return "[0]"
+                if size: return f"[0] * {size}"
+                else: return "[0]"
             elif _keytype == TokenKeys.real:
-                return "[0.0]"
+                if size: return f"[0.0] * {size}"
+                else: return "[0.0]"
             else:
-                return "[]"
+                if size: return f"[] * {size}"
+                else: return "[]"
 
     def getInputCast(self, key):
         type = self.symtab.getType(key)
@@ -85,10 +91,10 @@ class CodeGen:
     def genVarBlock(self):
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 6].key)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, self.tokens[self.index + 6].key)}\n"
                 self.index += 5
 
-            elif self.tokens[self.index + 1].key == TokenKeys.dot:
+            elif self.tokens[self.index + 1].key == TokenKeys.comma:
                 contents = 1
 
                 while True:
@@ -105,7 +111,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 5].key)}"
+                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, self.tokens[self.index + 5].key)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -117,7 +123,7 @@ class CodeGen:
 
                     for x in range(0, contents):
                         self.stdout += (
-                            f"{self.getDType(self.tokens[self.index].key, None)}"
+                            f"{self.getDType(self.tokens[self.index].key, 0, None)}"
                         )
                         if x < contents - 1:
                             self.stdout += ", "
@@ -126,7 +132,7 @@ class CodeGen:
                     self.index -= 1
 
             else:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, None)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, None)}\n"
 
             self.index += 2
 
@@ -148,15 +154,19 @@ class CodeGen:
                 self.genId()
             elif token.type == TokenTypes.se:
                 self.genSe()
+            elif token.type == TokenTypes.para:
+                self.genPara()
             else:
-                print(f"NOT IMPLEMENTED YET: {token.type}\n")
-                return 
+                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genSeBLock(self):
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-            self.stdout += "\t"
+            
+            for i in range(self.level):
+                self.stdout += "\t"
+
             if token.type == TokenTypes.fimse or token.type == TokenTypes.senao:
                 self.stdout = self.stdout[:-1]
                 break
@@ -168,9 +178,10 @@ class CodeGen:
                 self.genId()
             elif token.type == TokenTypes.se:
                 self.genSe()
+            elif token.type == TokenTypes.para:
+                self.genPara()
             else:
-                print(f"NOT IMPLEMENTED YET: {token.type}\n")
-                return
+                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genSe(self):
         self.stdout += "if "
@@ -178,11 +189,21 @@ class CodeGen:
         self.stdout += self.tokens[self.index].key
 
         self.index += 1
+        if self.tokens[self.index].type == TokenTypes.lSquare:
+            self.stdout += '['
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}"
+            self.index += 1
+            self.stdout += ']'
+            self.index += 1
+
         self.genExp()
         self.index += 1
         self.stdout += ":"
 
         self.index += 1
+        self.level += 1
+
         while self.tokens[self.index].type != TokenTypes.fimse:
             self.genSeBLock()
             if self.tokens[self.index].type == TokenTypes.senao:
@@ -190,14 +211,90 @@ class CodeGen:
                 self.index += 1
                 self.genSeBLock()
 
+        self.level -= 1
         self.index += 1
+        if not self.level:
+            self.stdout += "\n"
+
+    def genParaBLock(self):
         self.stdout += "\n"
+        while True:
+            token = self.tokens[self.index]
+            
+            for i in range(self.level):
+                self.stdout += "\t"
+
+            if token.type == TokenTypes.fimpara:
+                self.stdout = self.stdout[:-1]
+                break
+            elif token.type == TokenTypes.leia:
+                self.genLeia()
+            elif token.type == TokenTypes.escreva:
+                self.genEscreva()
+            elif token.type == TokenTypes.id:
+                self.genId()
+            elif token.type == TokenTypes.se:
+                self.genSe()
+            elif token.type == TokenTypes.para:
+                self.genPara()
+            else:
+                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+
+    def genPara(self):
+        self.stdout += "for "
+        self.index += 1
+        self.stdout += self.tokens[self.index].key
+        self.index += 1
+        self.stdout += " in "
+
+        if self.tokens[self.index].type == TokenTypes.numb:
+            range_start = self.tokens[self.index].key
+            self.index += 2
+            range_end = self.tokens[self.index].key
+            self.index += 2
+            range_step = self.tokens[self.index].key
+            self.stdout += f"range({range_start}, {range_end}, {range_step}):"
+            self.index += 2
+
+        elif self.tokens[self.index].type == TokenTypes.id:
+            range_start = self.tokens[self.index].key
+            self.index += 1
+            aux_stdout = self.stdout
+            self.stdout = ''
+            self.genExp()
+            exp = self.stdout
+            range_start += exp
+            self.stdout = aux_stdout
+            self.index += 1
+            range_end = self.tokens[self.index].key
+            self.index += 2
+            range_step = self.tokens[self.index].key
+            self.stdout += f"range({range_start}, {range_end}, {range_step}):"
+            self.index += 2
+ 
+        self.level += 1
+
+        while self.tokens[self.index].type != TokenTypes.fimpara:
+            self.genParaBLock()
+
+        self.level -= 1
+        self.index += 1
+        if not self.level:
+            self.stdout += "\n"
 
     def genVarAssign(self):
         self.index += 1
         self.stdout += f" = {self.tokens[self.index].key}"
 
         self.index += 1
+        if self.tokens[self.index].type == TokenTypes.lSquare:
+            self.stdout += '['
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}"
+            self.index += 1
+            self.stdout += ']'
+            self.index += 1
+
         if self.tokens[self.index].type == TokenTypes.mathOps:
             self.genExp()
 
@@ -206,6 +303,15 @@ class CodeGen:
     def genId(self):
         self.stdout += self.tokens[self.index].key
         self.index += 1
+
+        if self.tokens[self.index].type == TokenTypes.lSquare:
+            self.stdout += '['
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}"
+            self.index += 1
+            self.stdout += ']'
+            self.index += 1
+
         if self.tokens[self.index].type == TokenTypes.rArrow:
             self.genVarAssign()
 
@@ -217,10 +323,19 @@ class CodeGen:
                 self.index += 1
                 if self.tokens[self.index].type == TokenTypes.numb:
                     self.stdout += self.tokens[self.index].key
+                    self.index += 1
+
                 elif self.tokens[self.index].type == TokenTypes.id:
                     self.stdout += self.tokens[self.index].key
 
-                self.index += 1
+                    self.index += 1
+                    if self.tokens[self.index].type == TokenTypes.lSquare:
+                        self.stdout += '['
+                        self.index += 1
+                        self.stdout += f"{self.tokens[self.index].key}"
+                        self.index += 1
+                        self.stdout += ']'
+                        self.index += 1
 
         elif self.tokens[self.index].type == TokenTypes.mathOps:
             while self.tokens[self.index].type == TokenTypes.mathOps:
@@ -229,28 +344,58 @@ class CodeGen:
                 self.index += 1
                 if self.tokens[self.index].type == TokenTypes.numb:
                     self.stdout += self.tokens[self.index].key
+                    self.index += 1
                 elif self.tokens[self.index].type == TokenTypes.id:
                     self.stdout += self.tokens[self.index].key
+                    self.index += 1
 
-                self.index += 1
+                    if self.tokens[self.index].type == TokenTypes.lSquare:
+                        self.stdout += '['
+                        self.index += 1
+                        self.stdout += f"{self.tokens[self.index].key}"
+                        self.index += 1
+                        self.stdout += ']'
+                        self.index += 1
 
     def genLeia(self):
         self.index += 1
-        self.stdout += f"{self.tokens[self.index].key} = {self.getInputCast(self.tokens[self.index].key)}\n"
+
+        input_var = self.tokens[self.index].key
+        input_cast = self.getInputCast(self.tokens[self.index].key)
+
         self.index += 1
-        if self.tokens[self.index].type == TokenTypes.dot:
-            while self.tokens[self.index].type == TokenTypes.dot:
+        if self.tokens[self.index].type == TokenTypes.comma:
+            self.stdout += f"{input_var} = {input_cast}\n"
+
+            while self.tokens[self.index].type == TokenTypes.comma:
                 self.stdout += f"{self.tokens[self.index + 1].key} = {self.getInputCast(self.tokens[self.index + 1].key)}\n"
                 self.index += 2
 
-        self.stdout += "\n"
+        elif self.tokens[self.index].type == TokenTypes.lSquare:
+            self.index += 1
+            input_var_array_index = self.tokens[self.index].key
+            self.index += 2
+            self.stdout += f"{input_var}[{input_var_array_index}] = {input_cast}\n"
+        else:
+            self.stdout += f"{input_var} = {input_cast}\n"
+ 
+        # self.stdout += "\n"
 
     def genEscreva(self):
         self.index += 1
         self.stdout += f"print({self.tokens[self.index].key}"
         self.index += 1
-        if self.tokens[self.index].type == TokenTypes.dot:
-            while self.tokens[self.index].type == TokenTypes.dot:
+
+        if self.tokens[self.index].type == TokenTypes.lSquare:
+            self.stdout += '['
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}"
+            self.index += 1
+            self.stdout += ']'
+            self.index += 1
+
+        if self.tokens[self.index].type == TokenTypes.comma:
+            while self.tokens[self.index].type == TokenTypes.comma:
                 self.stdout += f", {self.tokens[self.index + 1].key}"
                 self.index += 2
         self.stdout += ")\n"
