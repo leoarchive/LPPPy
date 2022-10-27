@@ -31,7 +31,6 @@ class LPP:
         if (not os.path.exists('build')):
             os.mkdir('build')
         
-        print(self.file)
         build = open(f"build/{Path(self.file).name.split('.')[0]}.py", "w")
         build.write(self.transpiler.stdout)
         build.close

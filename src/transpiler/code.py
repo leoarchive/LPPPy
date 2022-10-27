@@ -169,7 +169,7 @@ class CodeGen:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-            
+          
             for i in range(self.level):
                 self.stdout += "\t"
 
@@ -190,24 +190,23 @@ class CodeGen:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genSe(self):
-        self.stdout += "if "
+        self.stdout += "if ("
         self.index += 2
         self.stdout += self.tokens[self.index].key
 
         self.index += 1
         if self.tokens[self.index].type == TokenTypes.lSquare:
+            self.index += 1
             self.stdout += '['
-            self.index += 1
-            self.stdout += f"{self.tokens[self.index].key}"
-            self.index += 1
+            self.stdout += self.tokens[self.index].key
             self.stdout += ']'
-            self.index += 1
+            self.index += 2
 
         self.genExp()
         self.index += 1
         self.stdout += ":"
 
-        self.index += 1
+        # self.index += 1
         self.level += 1
 
         while self.tokens[self.index].type != TokenTypes.fimse:
@@ -226,7 +225,7 @@ class CodeGen:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-            
+
             for i in range(self.level):
                 self.stdout += "\t"
 

@@ -89,6 +89,7 @@ class Parser:
             self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
             self.eatToken(self.lexer.lex(), TokenTypes.de)
             token = self.lexer.lex()
+        
             _symtype = token.key
             self.eatToken(token, TokenTypes.dType)
 
@@ -181,9 +182,8 @@ class Parser:
  
         token = self.parseExp(token)
 
-        # self.eatToken(token, TokenTypes.rParen)
-        self.eatToken(self.lexer.lex(), TokenTypes.entao)
-
+        self.eatToken(token, TokenTypes.entao)
+  
         while token.type != TokenTypes.fimse:
             token = self.parseSeBlock()
             if token.type == TokenTypes.senao:
@@ -239,7 +239,7 @@ class Parser:
             
         if token.type == TokenTypes.rArrow:
             token = self.parseVarAssign(token)
-
+            
         return token
 
     def parseVarAssign(self, token):
@@ -379,7 +379,6 @@ class Parser:
             self.eatToken(token, TokenTypes.rParen)
             token = self.lexer.lex()
 
-        
         return token
 
     def parseLeia(self, token):
