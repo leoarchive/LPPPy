@@ -1,0 +1,16 @@
+programa media_ponderada
+var
+	n1,n2,n3,n4,media:real
+início
+	escreva "insira o primeiro valor e tecle enter:"
+	leia n1
+	escreva "insira o segundo valor e tecle enter:"
+	leia n2
+	escreva "insira o terceiro valor e tecle enter:"
+	leia n3
+	escreva "insira o quarto valor e tecle enter:"
+	leia n4
+	media ← ((n1*1)+(n2*2)+(n3*3)+(n4*4)) / 4
+	escreva "A média ponderada é:"
+	escreva media 
+fim

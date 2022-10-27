@@ -1,0 +1,14 @@
+programa soma
+var
+	n1:inteiro
+	n2:inteiro
+	soma:inteiro
+início
+	escreva "insira o primeiro valor inteiro e tecle enter"
+	leia n1
+	escreva "insira o segundo valor inteiro e tecle enter"
+	leia n2
+	soma ← n1 + n2
+	escreva "Soma:"
+	escreva soma
+fim

@@ -1,0 +1,18 @@
+programa volume
+
+var
+	altura:real
+	raio:real
+	pi:real
+	volume:real	
+
+início
+	pi ← 3.1416
+	escreva "insira o raio da lata de óleo e tecle enter"
+	leia raio
+	escreva "Insira a altura da lata e tecle enter"
+	leia altura
+	volume ← (raio*raio)*altura*pi
+	escreva "O volume da lata de óleo é:"
+	escreva volume
+fim

@@ -1,0 +1,14 @@
+programa produto_2_numeros
+var
+	n1:real
+	n2:real
+	produto:real
+início
+	escreva "insira o primeiro número e tecle enter"
+	leia n1
+	escreva "insira o segundo número e tecle enter"
+	leia n2
+	produto ← n1 * n2 
+	escreva "o resultado é:"
+	escreva produto
+fim

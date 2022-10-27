@@ -1,0 +1,10 @@
+programa juros
+var
+	saldo_1,saldo_2:real
+início
+	escreva "Favor inserir o saldo anterior:"
+	ler saldo_1
+	saldo_2 ← saldo_1 + (saldo_1 * 0.01)
+	escreva "Seu saldo atual é:"
+	escreva saldo_2
+fim

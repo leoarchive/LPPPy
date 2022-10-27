@@ -1,0 +1,14 @@
+programa retangulo
+var
+	base,lado,area,perimetro:real 
+início
+	escreva "Insira o valor da base do retângulo e tecle enter"
+	leia base
+	escreva "Insira o valor da lateral do retângulo e tecle enter"
+	leia lado
+	perimetro ← (2 * base) + (2 * lado)
+	area ← base*lado
+	escreva "respectivamente, o valor do perímetro e da área do retângulo é:"
+	escreva perimetro
+	escreva area
+fim

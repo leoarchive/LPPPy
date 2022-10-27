@@ -1,0 +1,15 @@
+programa trocar_valores
+var
+	a,A,b,B:real
+início
+	escreva "insira o valor inicial de a e tecle enter"
+	leia a
+	escreva "Insira o valor inicial de b e tecle enter"
+	leia b
+	A ← b
+	B ← a
+	escreva "O novo valor de a é:"
+	escreva A
+	escreva "O novo valor de b é:"
+	escreva B
+fim

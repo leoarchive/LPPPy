@@ -1,0 +1,26 @@
+programa distributiva
+var
+	a,b,c,d,A,B,C,D,E,F:inteiro
+início
+	escreva "insira a variável a e tecle enter"
+	leia a 
+	escreva "insira a variável b e tecle enter"
+	leia b 
+	escreva "insira a variável c e tecle enter"
+	leia c 
+	escreva "insira a variável d e tecle enter"
+	leia d 
+	A ← (a+b)
+	B ← (a+c)
+	C ← (a+d)
+	D ← (b+c)
+	E ← (b+d)
+	F ← (c+d)
+	escreva "as combinações serão"
+	escreva "(a+b)"+A
+	escreva "(a+c)"+B
+	escreva "(a+d)"+C 
+	escreva "(b+c)"+D 
+	escreva "(b+d)"+E 
+	escreva "(c+d)"+F
+fim

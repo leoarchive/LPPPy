@@ -1,0 +1,15 @@
+programa antecessoresucessor
+var
+	n1:inteiro
+	n2:inteiro
+	n3:inteiro
+início
+	escreva "insira um número e tecle enter"
+	leia n2
+	n1 ← n2 - 1
+	n3 ← n2 + 1
+	escreva "em ordem estarão os seguintes números: antecessor, central e sucessor"
+	escreva n1
+	escreva n2
+	escreva n3
+fim

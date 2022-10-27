@@ -1,0 +1,14 @@
+programa circulo
+var
+	pi,raio,area,perimetro:real 
+
+início
+  pi ← 3.1416
+	escreva "Insira o valor do raio do círculo e tecle enter"
+	leia raio
+	perimetro ← (2 * raio * pi)
+	area ← (raio * raio) * pi
+	escreva "respectivamente, o valor do perímetro e da área do círculo é:"
+	escreva perimetro
+	escreva area
+fim

@@ -1,0 +1,12 @@
+programa decimal
+var
+	numerador_entrada,denominador_entrada:inteiro
+	numerador_saida,denominador_saida:real	
+início
+	escreva "insira o valor do numerador e tecle enter"
+	leia numerador_entrada
+	escreva "insira o valor do denominador e tecle enter"
+	leia denominador_entrada
+	numerador_saida ← numerador_entrada*1.00
+	denominador_saida ← denominador_entrada*1.00
+fim

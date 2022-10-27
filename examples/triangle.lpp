@@ -1,0 +1,12 @@
+programa triangulo
+var
+	base,altura,area:real 
+início
+	escreva "Insira o valor da base do triangulo e tecle enter"
+	leia base
+	escreva "Insira o valor da altura do triangulo e tecle enter"
+	leia lado
+	area ← (base*altura)/2
+	escreva "O valor da área do triangulo é:"
+	escreva area
+fim

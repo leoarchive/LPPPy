@@ -1,0 +1,11 @@
+programa conversao
+var
+	fahre:real
+	celsius:real
+início
+	escreva "insira o valor da temperatura em graus Celsius e tecle enter"
+	leia celsius
+	fahre ← (9*celsius+160)/5
+	escreva "A temperatura em Fahrenheit é:"
+	escreva fahre
+fim

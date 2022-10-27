@@ -1,0 +1,19 @@
+programa media_aritimetica
+var
+	n1:real
+	n2:real
+	n3:real
+	soma:real
+	media:real
+início
+	escreva "insira o primeiro número e tecle enter"
+	leia n1
+	escreva "insira o segundo número e tecle enter"
+	leia n2
+	escreva "insira o terceiro número e tecle enter"
+	leia n3
+	soma ← n1+n2+n3
+	media ← soma/3
+	escreva "o resultado da média é:"
+	escreva media 
+fim

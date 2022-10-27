@@ -1,0 +1,20 @@
+programa quilometragem
+var
+	distancia,velocidade,tempo_total,litros_usados:real
+	tempo_horas,tempo_minutos:inteiro
+início
+	escreva "inserir o número de horas inteiras de viagem e tecle enter"
+	leia tempo_horas
+	escreva "inserir os minutos de viagem, caso sejam horas inteiras, inserir 0 e tecle enter"
+	leia tempo_minutos
+	escreva "insira a velocidade média da viagem em km/h e tecle enter"
+	leia velocidade
+	tempo_total ← tempo_horas+(tempo_minutos/60)
+	distancia ← tempo_total*velocidade
+	litros_usados ← distancia/12
+	escreva "O resumo de sua viagem é:"
+	escreva "velocidade média"+velocidade
+	escreva "tempo gasto na viagem (em horas)"+tempo_total
+	escreva "distância percorrida (em km)"+distancia
+	escreva "quantidade de litros de combustível"+litros_usados
+fim

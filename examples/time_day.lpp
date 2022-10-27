@@ -1,0 +1,14 @@
+programa hora_dia
+var
+	hora:inteiro
+	minuto:inteiro
+	tempo_dia_minutos:inteiro
+início
+	escreva "insira a hora sem os minutos e tecle enter"
+	leia hora
+	escreva "Insira os minutos sem a hora e tecle enter"
+	leia minuto
+	tempo_dia_minutos ← minuto+(hora*60)
+	escreva "O tempo em minutos transcorrido hoje é:"
+	escreva tempo_dia_minutos
+fim

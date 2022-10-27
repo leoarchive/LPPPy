@@ -1,0 +1,11 @@
+programa tercaparte
+var
+	n1:real
+	resultado:real
+início
+	escreva "insira um número e tecle enter"
+	leia n1
+	resultado ← n1 / 3
+	escreva "A terça parte do número é:"
+	escreva resultado
+fim

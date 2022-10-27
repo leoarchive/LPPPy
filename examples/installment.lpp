@@ -1,0 +1,17 @@
+programa prestacao
+var
+	prestacao_atraso:real
+	prestacao_nova:real
+	taxa:real
+	tempo:inteiro
+início
+	escreva "Qual o valor da prestação em atraso? Insira e tecle enter"
+	leia prestacao_atraso
+	escreva "qual o valor da taxa da multa diária? Insira e tecle enter"
+	leia taxa
+	escreva "Quantos dias estão em atraso até hoje? Insira e tecle enter"
+	leia tempo
+	prestacao_nova ← prestacao_atraso+((prestacao_atraso*(taxa/100))*tempo)
+	escreva "O valor da prestação para quitação hoje é:"
+	escreva prestacao_nova
+fim

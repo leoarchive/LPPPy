@@ -1,0 +1,15 @@
+programa divisao
+var
+	dividendo,divisor,quociente,resto:inteiro
+início
+	escreva "digite o valor a ser dividido"
+	leia dividendo
+	escreva "digite o valor que vai dividir o outro"
+	leia divisor
+	quociente ← dividendo div divisor
+	resto ← dividendo mod divisor
+	escreva "Dividendo =" + dividendo
+	escreva "Divisor =" + divisor
+	escreva "Quociente =" + quociente
+	escreva "resto =" + resto
+fim
