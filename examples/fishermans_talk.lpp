@@ -1,0 +1,21 @@
+programa Papo_de_pescador
+var
+	peso_peixes:real
+	valor_pagar:real
+	pesofinal:real
+	multa:real
+	regulamento_sp:real
+início
+	multa ← 4.00
+	regulamento_sp ← 50.00
+	escreva "insira o peso de peixes capturado em kg"
+	leia peso_peixes
+	se (peso_peixes > regulamento_sp) então
+		valor_pagar ← (peso_peixes - regulamento_sp) * multa
+		escreva "o valor total em Reais a pagar como multa é:" + valor_pagar
+	senão
+		pesofinal ← peso_peixes- peso_peixes
+		escreva "o excesso de peixe que você pescou é:" + pesofinal
+		escreva "o valor total em reais a pagar é" + valor_pagar
+	fim_se
+fim
