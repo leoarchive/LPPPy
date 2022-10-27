@@ -81,6 +81,12 @@ class CodeGen:
         else:
             return key
 
+    def getMath(self, key):
+        if key == TokenKeys.mod:
+            return "%"
+        else:
+            return key
+
     def gen(self):
         self.stdout = f"# programa {self.tokens[self.index].key}\n"
         self.stdout += "# var\n"
@@ -284,7 +290,17 @@ class CodeGen:
 
     def genVarAssign(self):
         self.index += 1
-        self.stdout += f" = {self.tokens[self.index].key}"
+        self.stdout += " = "
+
+        while self.tokens[self.index].type == TokenTypes.lParen:
+            self.stdout += '('
+            self.index += 1
+
+        while self.tokens[self.index].type == TokenTypes.rParen:
+            self.stdout += ')'
+            self.index += 1
+
+        self.stdout += self.tokens[self.index].key
 
         self.index += 1
         if self.tokens[self.index].type == TokenTypes.lSquare:
@@ -294,8 +310,8 @@ class CodeGen:
             self.index += 1
             self.stdout += ']'
             self.index += 1
-
-        if self.tokens[self.index].type == TokenTypes.mathOps:
+            
+        if self.tokens[self.index].type == TokenTypes.mathOps or self.tokens[self.index].type == TokenTypes.lParen or self.tokens[self.index].type == TokenTypes.rParen:
             self.genExp()
 
         self.stdout += "\n"
@@ -312,15 +328,28 @@ class CodeGen:
             self.stdout += ']'
             self.index += 1
 
+        
         if self.tokens[self.index].type == TokenTypes.rArrow:
             self.genVarAssign()
 
     def genExp(self):
+        while self.tokens[self.index].type == TokenTypes.lParen:
+            self.stdout += '('
+            self.index += 1
+
         if self.tokens[self.index].type == TokenTypes.logicalOps:
             while self.tokens[self.index].type == TokenTypes.logicalOps:
                 self.stdout += f" {self.getLogical(self.tokens[self.index].key)} "
 
                 self.index += 1
+                while self.tokens[self.index].type == TokenTypes.lParen:
+                    self.stdout += '('
+                    self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.rParen:
+                    self.stdout += ')'
+                    self.index += 1
+
                 if self.tokens[self.index].type == TokenTypes.numb:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1
@@ -336,12 +365,28 @@ class CodeGen:
                         self.index += 1
                         self.stdout += ']'
                         self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.lParen:
+                    self.stdout += '('
+                    self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.rParen:
+                    self.stdout += ')'
+                    self.index += 1
 
         elif self.tokens[self.index].type == TokenTypes.mathOps:
             while self.tokens[self.index].type == TokenTypes.mathOps:
-                self.stdout += f" {self.tokens[self.index].key} "
+                self.stdout += f" {self.getMath(self.tokens[self.index].key)} "
 
                 self.index += 1
+                while self.tokens[self.index].type == TokenTypes.lParen:
+                    self.stdout += '('
+                    self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.rParen:
+                    self.stdout += ')'
+                    self.index += 1
+
                 if self.tokens[self.index].type == TokenTypes.numb:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1
@@ -356,6 +401,22 @@ class CodeGen:
                         self.index += 1
                         self.stdout += ']'
                         self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.lParen:
+                    self.stdout += '('
+                    self.index += 1
+
+                while self.tokens[self.index].type == TokenTypes.rParen:
+                    self.stdout += ')'
+                    self.index += 1
+
+        while self.tokens[self.index].type == TokenTypes.lParen:
+            self.stdout += '('
+            self.index += 1
+
+        while self.tokens[self.index].type == TokenTypes.rParen:
+            self.stdout += ')'
+            self.index += 1
 
     def genLeia(self):
         self.index += 1
@@ -392,6 +453,11 @@ class CodeGen:
             self.stdout += f"{self.tokens[self.index].key}"
             self.index += 1
             self.stdout += ']'
+            self.index += 1
+
+        if self.tokens[self.index].type == TokenTypes.mathOps:
+            self.index += 1
+            self.stdout += f", {self.tokens[self.index].key}"
             self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.comma:

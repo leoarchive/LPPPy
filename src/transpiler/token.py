@@ -60,6 +60,7 @@ class TokenKeys:
     ate = "até"
     passo = "passo"
     faca = "faça"
+    mod = "mod"
 
 
 class TokenTypes(Enum):
@@ -182,6 +183,7 @@ class Token:
             or key == TokenKeys.minus
             or key == TokenKeys.mult
             or key == TokenKeys.div
+            or key == TokenKeys.mod
         ):
             return TokenTypes.mathOps
         else:

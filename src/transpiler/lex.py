@@ -54,6 +54,7 @@ class Lexer:
         TokenKeys.ate,
         TokenKeys.passo,
         TokenKeys.faca,
+        TokenKeys.mod,
     ]
     keyChars = [
         TokenKeys.minus,
@@ -122,7 +123,7 @@ class Lexer:
 
     def lex_number(self):
         start = self.index
-        while len(self.stdin) > self.index and self.stdin[self.index].isnumeric():
+        while len(self.stdin) > self.index and (self.stdin[self.index].isnumeric() or self.stdin[self.index] == '.'):
             self.index += 1
 
         key = self.stdin[start : self.index]
