@@ -15,7 +15,6 @@ Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você
 
 - Crie um fork do projeto;
 - Implemente suas alterações seguindo as [convenções de código](#Convenções-de-código);
-- Faça squash dos commits para que fiquem em apenas um commit (isso pode ser feito com ```git rebase -i```);
 - Se esforce para que tenha uma mensagem de commit decente;
 - Abra um pull request e resolva qualquer comentário/dúvida que possa ser feita por um contribuidor ou mantenedor do projeto.
 	
