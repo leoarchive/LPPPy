@@ -84,6 +84,8 @@ class CodeGen:
     def getMath(self, key):
         if key == TokenKeys.mod:
             return "%"
+        if key == TokenKeys.exponent:
+            return "**"
         else:
             return key
 

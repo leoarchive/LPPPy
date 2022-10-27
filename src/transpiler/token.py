@@ -61,7 +61,7 @@ class TokenKeys:
     passo = "passo"
     faca = "faça"
     mod = "mod"
-
+    exponent = "↑"
 
 class TokenTypes(Enum):
     id = 1
@@ -96,6 +96,7 @@ class TokenTypes(Enum):
     ate = 30
     passo = 31
     faca = 32
+    exponent = 33
 
 
 class Token:
@@ -184,6 +185,7 @@ class Token:
             or key == TokenKeys.mult
             or key == TokenKeys.div
             or key == TokenKeys.mod
+            or key == TokenKeys.exponent
         ):
             return TokenTypes.mathOps
         else:

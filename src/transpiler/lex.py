@@ -69,6 +69,7 @@ class Lexer:
         TokenKeys.rSquare,
         TokenKeys.comma,
         TokenKeys.lSquare,
+        TokenKeys.exponent,
     ]
     chars = ["\n"]
 
