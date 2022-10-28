@@ -103,6 +103,7 @@ class TokenTypes(Enum):
     enquanto = 34
     fim_enquanto = 35
     procedimento = 36
+    call = 37
 
 
 class Token:

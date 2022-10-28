@@ -98,7 +98,17 @@ class CodeGen:
 
     def genVarBlock(self):
         while self.tokens[self.index].type != TokenTypes.inicio:
-            if self.tokens[self.index + 1].key == TokenKeys.conjunto:
+            if self.tokens[self.index].key == TokenKeys.procedimento:
+                self.stdout += "\ndef "
+                self.index += 1
+                self.stdout += f"{self.tokens[self.index].key}():\n\t"
+                self.index += 1
+                self.level += 1
+                self.genProcedimento()
+                self.index -= 1
+                self.level -= 1
+
+            elif self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, self.tokens[self.index + 6].key)}\n"
                 self.index += 5
 
@@ -146,6 +156,56 @@ class CodeGen:
 
         self.genInicio()
 
+    def genProcedimento(self):
+        while self.tokens[self.index].type != TokenTypes.inicio:
+            if self.tokens[self.index + 1].key == TokenKeys.conjunto:
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, self.tokens[self.index + 6].key)}\n"
+                self.index += 5
+
+            elif self.tokens[self.index + 1].key == TokenKeys.comma:
+                contents = 1
+
+                while True:
+                    self.stdout += self.tokens[self.index].key
+                    if self.tokens[self.index + 1].type == TokenTypes.dType:
+                        self.index += 1
+                        break
+                    else:
+                        contents += 1
+                        self.stdout += ", "
+                        self.index += 2
+
+                if self.tokens[self.index].key == TokenKeys.conjunto:
+                    self.stdout += " = "
+
+                    for x in range(0, contents):
+                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, self.tokens[self.index + 5].key)}"
+                        if x < contents - 1:
+                            self.stdout += ", "
+
+                    self.stdout += "\n"
+                    self.index += 4
+
+                else:
+                    self.stdout += " = "
+
+                    for x in range(0, contents):
+                        self.stdout += (
+                            f"{self.getDType(self.tokens[self.index].key, 0, None)}"
+                        )
+                        if x < contents - 1:
+                            self.stdout += ", "
+
+                    self.stdout += "\n"
+                    self.index -= 1
+
+            else:
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, None)}\n"
+
+            self.index += 2
+
+        self.genProcedimentoBlock()
+
     def genInicio(self):
         self.stdout += "\n# início\n"
         self.index += 1
@@ -153,6 +213,31 @@ class CodeGen:
             token = self.tokens[self.index]
             if token.type == TokenTypes.fim:
                 self.stdout += "# fim\n"
+                break
+            elif token.type == TokenTypes.leia:
+                self.genLeia()
+            elif token.type == TokenTypes.escreva:
+                self.genEscreva()
+            elif token.type == TokenTypes.id:
+                self.genId()
+            elif token.type == TokenTypes.se:
+                self.genSe()
+            elif token.type == TokenTypes.para:
+                self.genPara()
+            elif token.type == TokenTypes.enquanto:
+                self.genEnquanto()
+            else:
+                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+
+    def genProcedimentoBlock(self):
+        self.index += 1
+        while True:
+            token = self.tokens[self.index]
+
+            for i in range(self.level):
+                self.stdout += "\t"
+
+            if token.type == TokenTypes.fim:
                 break
             elif token.type == TokenTypes.leia:
                 self.genLeia()
@@ -211,8 +296,6 @@ class CodeGen:
         self.genExp()
         self.index += 1
         self.stdout += ":"
-
-        # self.index += 1
         self.level += 1
 
         while self.tokens[self.index].type != TokenTypes.fimse:
@@ -368,7 +451,12 @@ class CodeGen:
         self.stdout += "\n"
 
     def genId(self):
-        self.stdout += self.tokens[self.index].key
+        dtype = self.symtab.getType(self.tokens[self.index].key)
+        if dtype == TokenTypes.call:
+            self.stdout += f"{self.tokens[self.index].key}()"
+        else: 
+            self.stdout += self.tokens[self.index].key
+
         self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.lSquare:

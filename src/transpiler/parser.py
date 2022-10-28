@@ -62,7 +62,9 @@ class Parser:
 
         if token.type == TokenTypes.procedimento:
             self.eatToken(token, TokenTypes.procedimento)
-            self.eatToken(self.lexer.lex(), TokenTypes.id)
+            token = self.lexer.lex()
+            self.symtab.push(token, TokenTypes.call)
+            self.eatToken(token, TokenTypes.id)
             self.eatToken(self.lexer.lex(), TokenTypes.var)
             token = self.parseProcedimento(self.lexer.lex())
             self.eatToken(token, TokenTypes.fim)
