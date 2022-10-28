@@ -34,7 +34,7 @@ class CodeGen:
 
     def run(self, tokens):
         self.tokens = tokens
-
+ 
         self.gen()
 
     def getDType(self, key, size, _keytype):
@@ -164,6 +164,8 @@ class CodeGen:
                 self.genSe()
             elif token.type == TokenTypes.para:
                 self.genPara()
+            elif token.type == TokenTypes.enquanto:
+                self.genEnquanto()
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
@@ -188,6 +190,8 @@ class CodeGen:
                 self.genSe()
             elif token.type == TokenTypes.para:
                 self.genPara()
+            elif token.type == TokenTypes.enquanto:
+                self.genEnquanto()
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
@@ -217,11 +221,10 @@ class CodeGen:
                 self.stdout += "else:"
                 self.index += 1
                 self.genSeBLock()
-
+                
+        self.stdout += "\n"
         self.level -= 1
         self.index += 1
-        if not self.level:
-            self.stdout += "\n"
 
     def genParaBLock(self):
         self.stdout += "\n"
@@ -244,6 +247,34 @@ class CodeGen:
                 self.genSe()
             elif token.type == TokenTypes.para:
                 self.genPara()
+            elif token.type == TokenTypes.enquanto:
+                self.genEnquanto()
+            else:
+                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+
+    def genEnquantoBLock(self):
+        self.stdout += "\n"
+        while True:
+            token = self.tokens[self.index]
+
+            for i in range(self.level):
+                self.stdout += "\t"
+
+            if token.type == TokenTypes.fim_enquanto:
+                self.stdout = self.stdout[:-1]
+                break
+            elif token.type == TokenTypes.leia:
+                self.genLeia()
+            elif token.type == TokenTypes.escreva:
+                self.genEscreva()
+            elif token.type == TokenTypes.id:
+                self.genId()
+            elif token.type == TokenTypes.se:
+                self.genSe()
+            elif token.type == TokenTypes.para:
+                self.genPara()
+            elif token.type == TokenTypes.enquanto:
+                self.genEnquanto()
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
@@ -281,8 +312,27 @@ class CodeGen:
  
         self.level += 1
 
-        while self.tokens[self.index].type != TokenTypes.fimpara:
+        if self.tokens[self.index].type != TokenTypes.fimpara:
             self.genParaBLock()
+
+        self.level -= 1
+        self.index += 1
+        if not self.level:
+            self.stdout += "\n"
+
+    def genEnquanto(self):
+        self.stdout += "while ("
+        self.index += 2
+        self.stdout += self.tokens[self.index].key
+        self.index += 1
+
+        self.genExp()
+        self.stdout += ":"
+        self.index += 1
+
+        self.level += 1
+        if self.tokens[self.index].type != TokenTypes.fimpara:
+            self.genEnquantoBLock()
 
         self.level -= 1
         self.index += 1
@@ -351,7 +401,11 @@ class CodeGen:
                     self.stdout += ')'
                     self.index += 1
 
-                if self.tokens[self.index].type == TokenTypes.numb:
+                if self.tokens[self.index].type == TokenTypes.str:
+                    self.stdout += self.tokens[self.index].key
+                    self.index += 1
+
+                elif self.tokens[self.index].type == TokenTypes.numb:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1
 
@@ -388,9 +442,14 @@ class CodeGen:
                     self.stdout += ')'
                     self.index += 1
 
-                if self.tokens[self.index].type == TokenTypes.numb:
+                if self.tokens[self.index].type == TokenTypes.str:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1
+
+                elif self.tokens[self.index].type == TokenTypes.numb:
+                    self.stdout += self.tokens[self.index].key
+                    self.index += 1
+
                 elif self.tokens[self.index].type == TokenTypes.id:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1

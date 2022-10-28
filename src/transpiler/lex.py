@@ -55,6 +55,9 @@ class Lexer:
         TokenKeys.passo,
         TokenKeys.faca,
         TokenKeys.mod,
+        TokenKeys.enquanto,
+        TokenKeys.fim_enquanto,
+        TokenKeys.procedimento,
     ]
     keyChars = [
         TokenKeys.minus,

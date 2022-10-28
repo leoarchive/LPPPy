@@ -62,6 +62,9 @@ class TokenKeys:
     faca = "faça"
     mod = "mod"
     exponent = "↑"
+    enquanto = "enquanto"
+    fim_enquanto = "fim_enquanto"
+    procedimento = "procedimento"
 
 class TokenTypes(Enum):
     id = 1
@@ -97,6 +100,9 @@ class TokenTypes(Enum):
     passo = 31
     faca = 32
     exponent = 33
+    enquanto = 34
+    fim_enquanto = 35
+    procedimento = 36
 
 
 class Token:
@@ -158,6 +164,12 @@ class Token:
             return TokenTypes.ate
         elif key == TokenKeys.passo:
             return TokenTypes.passo
+        elif key == TokenKeys.enquanto:
+            return TokenTypes.enquanto
+        elif key == TokenKeys.fim_enquanto:
+            return TokenTypes.fim_enquanto
+        elif key == TokenKeys.procedimento:
+            return TokenTypes.procedimento
         elif key == TokenKeys.faca:
             return TokenTypes.faca
         elif (
