@@ -98,7 +98,7 @@ class CodeGen:
         while self.tokens[self.index].key == TokenKeys.procedimento:
             self.stdout += "\ndef "
             self.index += 1
-            self.stdout += f"{self.tokens[self.index].key}():\n\t"
+            self.stdout += f"{self.tokens[self.index].key}():\n"
             self.index += 1
             self.level += 1
             self.genProcedimento()
@@ -165,10 +165,12 @@ class CodeGen:
     def genProcedimento(self):
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
+                self.stdout += "\t"
                 self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
                 self.index += 5
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
+                self.stdout += "\t"
                 contents = 1
 
                 while True:
@@ -206,6 +208,7 @@ class CodeGen:
                     self.index -= 1
 
             else:
+                self.stdout += "\t"
                 self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
