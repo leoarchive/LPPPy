@@ -1,6 +1,6 @@
 programa triangulo
 var
-	base,altura,area:real 
+	base,altura,area,lado:real 
 início
 	escreva "Insira o valor da base do triangulo e tecle enter"
 	leia base

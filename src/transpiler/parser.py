@@ -52,15 +52,9 @@ class Parser:
     def parse(self):
         self.eatToken(self.lexer.lex(), TokenTypes.programa)
         self.eatToken(self.lexer.lex(), TokenTypes.id)
-        self.eatToken(self.lexer.lex(), TokenTypes.var)
-        self.parseVarBlock(self.lexer.lex())
+        token = self.lexer.lex()
 
-    def parseVarBlock(self, token):
-        if token.type == TokenTypes.inicio:
-            self.eatToken(token, TokenTypes.inicio)
-            return self.parseInicio()
-
-        if token.type == TokenTypes.procedimento:
+        while token.type == TokenTypes.procedimento:
             self.eatToken(token, TokenTypes.procedimento)
             token = self.lexer.lex()
             self.symtab.push(token, TokenTypes.call)
@@ -68,7 +62,15 @@ class Parser:
             self.eatToken(self.lexer.lex(), TokenTypes.var)
             token = self.parseProcedimento(self.lexer.lex())
             self.eatToken(token, TokenTypes.fim)
-            return self.parseVarBlock(self.lexer.lex())
+            token = self.lexer.lex()
+        
+        self.eatToken(token, TokenTypes.var)
+        self.parseVarBlock(self.lexer.lex())
+
+    def parseVarBlock(self, token):
+        if token.type == TokenTypes.inicio:
+            self.eatToken(token, TokenTypes.inicio)
+            return self.parseInicio()
              
         self.eatToken(token, TokenTypes.id)
 

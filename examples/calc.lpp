@@ -1,58 +1,59 @@
 programa CALCULADORA
+procedimento ROTSOMA
+var
+  R,A,B:real
+início
+  escreva "Rotina de Adição"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A + B
+  escreva "A soma de A com B é = ", R
+fim
+
+procedimento ROTSUBTRACAO
+var
+  R,A,B:real
+início
+  escreva "Rotina de Subtração"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A - B
+  escreva "A subtração de A com B é = ", R
+fim
+
+procedimento ROTMULTIPLICACAO
+var
+  R,A,B:real
+início
+  escreva "Rotina de Multiplicação"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A * B
+  escreva "A multiplicação de A com B é = ", R
+fim
+
+procedimento ROTDIVISAO
+var
+  R,A,B:real
+início
+  escreva "Rotina de Divisão"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A / B
+  escreva "A divisão de A com B é = ", R
+fim
+
 var
   OPCAO: caractere
 
-  procedimento ROTSOMA
-  var
-    R,A,B:real
-  início
-    escreva "Rotina de Adição"
-    escreva "Entre um valor para A: "
-    leia A
-    escreva "Entre um valor para B: "
-    leia B
-    R ← A + B
-    escreva "A soma de A com B é = ", R
-  fim
-
-  procedimento ROTSUBTRACAO
-  var
-    R,A,B:real
-  início
-    escreva "Rotina de Subtração"
-    escreva "Entre um valor para A: "
-    leia A
-    escreva "Entre um valor para B: "
-    leia B
-    R ← A - B
-    escreva "A subtração de A com B é = ", R
-  fim
-
-  procedimento ROTMULTIPLICACAO
-  var
-    R,A,B:real
-  início
-    escreva "Rotina de Multiplicação"
-    escreva "Entre um valor para A: "
-    leia A
-    escreva "Entre um valor para B: "
-    leia B
-    R ← A * B
-    escreva "A multiplicação de A com B é = ", R
-  fim
-
-  procedimento ROTDIVISAO
-  var
-    R,A,B:real
-  início
-    escreva "Rotina de Divisão"
-    escreva "Entre um valor para A: "
-    leia A
-    escreva "Entre um valor para B: "
-    leia B
-    R ← A / B
-    escreva "A divisão de A com B é = ", R
-  fim
 
   início
     OPCAO ← "0"

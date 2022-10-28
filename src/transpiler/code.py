@@ -64,12 +64,12 @@ class CodeGen:
 
     def getInputCast(self, key):
         type = self.symtab.getType(key)
-        if type == TokenKeys.caractere:
-            return "input()"
-        elif type == TokenKeys.inteiro:
+        if type == TokenKeys.inteiro:
             return "int(input())"
         elif type == TokenKeys.real:
             return "float(input())"
+        else:
+            return "input()"
 
     def getLogical(self, key):
         if key == TokenKeys._and:
@@ -86,8 +86,6 @@ class CodeGen:
             return key
 
     def getMath(self, key):
-        # if key == TokenKeys.mod:
-        #     return "%"
         if key == TokenKeys.exponent:
             return "**"
         else:
@@ -95,24 +93,24 @@ class CodeGen:
 
     def gen(self):
         self.stdout = f"# programa {self.tokens[self.index].key}\n"
-        self.stdout += "# var\n"
         self.index += 1
 
+        while self.tokens[self.index].key == TokenKeys.procedimento:
+            self.stdout += "\ndef "
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}():\n\t"
+            self.index += 1
+            self.level += 1
+            self.genProcedimento()
+            self.index += 1
+            self.level -= 1
+
+        self.stdout += "\n# var\n"
         self.genVarBlock()
 
     def genVarBlock(self):
         while self.tokens[self.index].type != TokenTypes.inicio:
-            if self.tokens[self.index].key == TokenKeys.procedimento:
-                self.stdout += "\ndef "
-                self.index += 1
-                self.stdout += f"{self.tokens[self.index].key}():\n\t"
-                self.index += 1
-                self.level += 1
-                self.genProcedimento()
-                self.index -= 1
-                self.level -= 1
-
-            elif self.tokens[self.index + 1].key == TokenKeys.conjunto:
+            if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 if self.tokens[self.index + 5].type == TokenTypes.comma:
                     self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, True, self.tokens[self.index + 9].key)}\n"
                     self.index += 8
