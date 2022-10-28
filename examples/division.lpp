@@ -7,7 +7,7 @@ início
 	escreva "digite o valor que vai dividir o outro"
 	leia divisor
 	quociente ← dividendo div divisor
-	resto ← dividendo mod divisor
+	resto ← dividendo % divisor
 	escreva "Dividendo =" + dividendo
 	escreva "Divisor =" + divisor
 	escreva "Quociente =" + quociente

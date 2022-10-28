@@ -6,7 +6,7 @@ início
 	para numero de 1 até 4 passo 1 faça
 		escreva "digite a primeira nota"
 		leia menor 
-		se (menor2 = null) então
+		se (menor2 = nulo) então
 			menor2 ← menor
 		fim_se
 		se (menor2 > menor) então

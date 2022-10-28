@@ -4,8 +4,8 @@ var
 início
 	numero ← 100
 	para numero de 100 até 500 passo 1 faça
-		resultado1 ← numero mod 3
-		resultado2 ← numero mod 13
+		resultado1 ← numero % 3
+		resultado2 ← numero % 13
 		se (resultado1 = 0) então
 			escreva "o número"+numero+"é divisível por 3"
 		fim_se

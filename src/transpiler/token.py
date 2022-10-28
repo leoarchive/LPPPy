@@ -60,12 +60,12 @@ class TokenKeys:
     ate = "até"
     passo = "passo"
     faca = "faça"
-    mod = "mod"
+    mod = "%"
     exponent = "↑"
     enquanto = "enquanto"
     fim_enquanto = "fim_enquanto"
     procedimento = "procedimento"
-    null = "null"
+    null = "nulo"
 
 class TokenTypes(Enum):
     id = 1

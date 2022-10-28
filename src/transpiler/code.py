@@ -86,8 +86,8 @@ class CodeGen:
             return key
 
     def getMath(self, key):
-        if key == TokenKeys.mod:
-            return "%"
+        # if key == TokenKeys.mod:
+        #     return "%"
         if key == TokenKeys.exponent:
             return "**"
         else:
@@ -474,7 +474,8 @@ class CodeGen:
     def genId(self):
         dtype = self.symtab.getType(self.tokens[self.index].key)
         if dtype == TokenTypes.call:
-            self.stdout += f"{self.tokens[self.index].key}()"
+            self.stdout += f"{self.tokens[self.index].key}()\n"
+
         else: 
             self.stdout += self.tokens[self.index].key
 
