@@ -10,4 +10,10 @@ início
       leia NOTAS[I,J]
     fim_para
   fim_para
+
+  para I de 1 até 8 passo 1 faça
+    para J de 1 até 4 passo 1 faça
+      escreva NOTAS[I,J]
+    fim_para
+  fim_para
 fim 

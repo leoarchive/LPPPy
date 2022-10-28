@@ -605,7 +605,18 @@ class Parser:
                 else:
                     self.eatToken(token, TokenTypes.id)
 
-                self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
+                token = self.lexer.lex()
+
+                if token.type == TokenTypes.comma:
+                    self.eatToken(token, TokenTypes.comma)   
+                    token = self.lexer.lex()
+                    if token.type == TokenTypes.numb:
+                        self.eatToken(token, TokenTypes.numb)
+                    else:
+                        self.eatToken(token, TokenTypes.id)   
+                    token = self.lexer.lex()
+
+                self.eatToken(token, TokenTypes.rSquare)
                 token = self.lexer.lex()
 
         if token.type == TokenTypes.comma:
