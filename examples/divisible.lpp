@@ -1,0 +1,13 @@
+programa divisiveis
+var
+	numero,resultado1, resultado2:real
+início
+	numero ← 15
+	para numero de 15 até 150 passo 1 faça
+	resultado1 ← numero mod 5
+	resultado2 ← numero mod 7
+		se (resultado1 + resultado2 = 0) então
+		escreva "o número" + numero + "é divisível por 5 e 7"
+		fim_se
+	fim_para
+fim

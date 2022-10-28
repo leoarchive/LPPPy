@@ -517,6 +517,9 @@ class CodeGen:
                     self.stdout += ')'
                     self.index += 1
 
+                if self.tokens[self.index].type == TokenTypes.mathOps:
+                    self.genExp()
+
         elif self.tokens[self.index].type == TokenTypes.mathOps:
             while self.tokens[self.index].type == TokenTypes.mathOps:
                 self.stdout += f" {self.getMath(self.tokens[self.index].key)} "
@@ -557,6 +560,9 @@ class CodeGen:
                 while self.tokens[self.index].type == TokenTypes.rParen:
                     self.stdout += ')'
                     self.index += 1
+
+                if self.tokens[self.index].type == TokenTypes.logicalOps:
+                    self.genExp()
 
         while self.tokens[self.index].type == TokenTypes.lParen:
             self.stdout += '('
@@ -603,7 +609,7 @@ class CodeGen:
             self.stdout += ']'
             self.index += 1
 
-        if self.tokens[self.index].type == TokenTypes.mathOps:
+        while self.tokens[self.index].type == TokenTypes.mathOps:
             self.index += 1
             self.stdout += f", {self.tokens[self.index].key}"
             self.index += 1

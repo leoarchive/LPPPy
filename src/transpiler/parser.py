@@ -475,6 +475,9 @@ class Parser:
                     self.eatToken(token, TokenTypes.rParen)
                     token = self.lexer.lex()
 
+                if token.type == TokenTypes.mathOps:
+                    return self.parseExp(token)
+
         elif token.type == TokenTypes.mathOps:
             while token.type == TokenTypes.mathOps:
                 self.eatToken(token, TokenTypes.mathOps)
@@ -520,6 +523,9 @@ class Parser:
                     self.eatToken(token, TokenTypes.rParen)
                     token = self.lexer.lex()
 
+                if token.type == TokenTypes.logicalOps:
+                    return self.parseExp(token)
+
         while token.type == TokenTypes.rParen:
             self.eatToken(token, TokenTypes.rParen)
             token = self.lexer.lex()
@@ -557,6 +563,8 @@ class Parser:
                     token = self.lexer.lex()
                     if token.type == TokenTypes.numb:
                         self.eatToken(token, TokenTypes.numb)
+                    elif token.type == TokenTypes.str:
+                        self.eatToken(token, TokenTypes.str)
                     else:
                         self.eatToken(token, TokenTypes.id)
                     token = self.lexer.lex()
@@ -571,6 +579,8 @@ class Parser:
                 token = self.lexer.lex()
                 if token.type == TokenTypes.numb:
                     self.eatToken(token, TokenTypes.numb)
+                elif token.type == TokenTypes.str:
+                    self.eatToken(token, TokenTypes.str)
                 else:
                     self.eatToken(token, TokenTypes.id)
 
