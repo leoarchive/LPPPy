@@ -1,0 +1,16 @@
+programa multiplos
+var
+	numero,resultado1, resultado2:real
+início
+	numero ← 100
+	para numero de 100 até 500 passo 1 faça
+		resultado1 ← numero mod 3
+		resultado2 ← numero mod 13
+		se (resultado1 = 0) então
+			escreva "o número"+numero+"é divisível por 3"
+		fim_se
+		se (resultado2 = 0) então
+			escreva "o número"+numero+"é divisível por 13"
+		fim_se
+	fim_para
+fim

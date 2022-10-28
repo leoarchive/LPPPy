@@ -1,0 +1,21 @@
+programa cadastro
+var
+	numero,idade:inteiro
+	nome:caractere
+	sexo:caractere
+início
+	numero ← 1
+	para numero de 1 até 5 passo 1 faça
+		escreva "escreva o nome do candidato número"+numero
+		leia nome
+		escreva "escreva o sexo do candidato numero"+numero +"com uma letra M ou F"
+		leia sexo
+		escreva "escreva a idade do candidato número"+numero
+		leia idade
+		se (sexo = "M") então
+			se (idade > 21) então
+				escreva nome
+			fim_se
+		fim_se
+	fim_para
+fim 

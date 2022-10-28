@@ -37,7 +37,7 @@ class CodeGen:
  
         self.gen()
 
-    def getDType(self, key, size, _keytype):
+    def getDType(self, key, size, matrix, _keytype):
         if key == TokenKeys.caractere:
             return "''"
         elif key == TokenKeys.inteiro:
@@ -46,16 +46,20 @@ class CodeGen:
             return "0.0"
         elif key == TokenKeys.conjunto:
             if _keytype == TokenKeys.caractere:
-                if size: return f"[''] * {size}"
+                if matrix: return f"[['' for _ in range({size})] for _ in range({size})]"
+                elif size: return f"[''] * {size}"
                 else: return "['']"
             elif _keytype == TokenKeys.inteiro:
-                if size: return f"[0] * {size}"
+                if matrix and size: return f"[[0 for _ in range({size})] for _ in range({size})]"
+                elif size: return f"[0] * {size}"
                 else: return "[0]"
             elif _keytype == TokenKeys.real:
-                if size: return f"[0.0] * {size}"
+                if matrix: return f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                elif size: return f"[0.0] * {size}"
                 else: return "[0.0]"
             else:
-                if size: return f"[] * {size}"
+                if matrix: return f"[0][0]"
+                elif size: return f"[] * {size}"
                 else: return "[]"
 
     def getInputCast(self, key):
@@ -109,8 +113,12 @@ class CodeGen:
                 self.level -= 1
 
             elif self.tokens[self.index + 1].key == TokenKeys.conjunto:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, self.tokens[self.index + 6].key)}\n"
-                self.index += 5
+                if self.tokens[self.index + 5].type == TokenTypes.comma:
+                    self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, True, self.tokens[self.index + 9].key)}\n"
+                    self.index += 8
+                else:
+                    self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
+                    self.index += 5
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
                 contents = 1
@@ -129,7 +137,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, self.tokens[self.index + 5].key)}"
+                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -141,7 +149,7 @@ class CodeGen:
 
                     for x in range(0, contents):
                         self.stdout += (
-                            f"{self.getDType(self.tokens[self.index].key, 0, None)}"
+                            f"{self.getDType(self.tokens[self.index].key, 0, False, None)}"
                         )
                         if x < contents - 1:
                             self.stdout += ", "
@@ -150,7 +158,7 @@ class CodeGen:
                     self.index -= 1
 
             else:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, None)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
 
@@ -159,7 +167,7 @@ class CodeGen:
     def genProcedimento(self):
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, self.tokens[self.index + 6].key)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
                 self.index += 5
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
@@ -179,7 +187,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, self.tokens[self.index + 5].key)}"
+                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -191,7 +199,7 @@ class CodeGen:
 
                     for x in range(0, contents):
                         self.stdout += (
-                            f"{self.getDType(self.tokens[self.index].key, 0, None)}"
+                            f"{self.getDType(self.tokens[self.index].key, 0, False, None)}"
                         )
                         if x < contents - 1:
                             self.stdout += ", "
@@ -200,7 +208,7 @@ class CodeGen:
                     self.index -= 1
 
             else:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, None)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
 
@@ -313,7 +321,7 @@ class CodeGen:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-
+            
             for i in range(self.level):
                 self.stdout += "\t"
 
@@ -392,7 +400,7 @@ class CodeGen:
             range_step = self.tokens[self.index].key
             self.stdout += f"range({range_start}, {range_end}, {range_step}):"
             self.index += 2
- 
+
         self.level += 1
 
         if self.tokens[self.index].type != TokenTypes.fimpara:
@@ -589,8 +597,14 @@ class CodeGen:
         elif self.tokens[self.index].type == TokenTypes.lSquare:
             self.index += 1
             input_var_array_index = self.tokens[self.index].key
-            self.index += 2
-            self.stdout += f"{input_var}[{input_var_array_index}] = {input_cast}\n"
+            self.index += 1
+            if self.tokens[self.index].type == TokenTypes.comma:
+                self.index += 1
+                self.stdout += f"{input_var}[{input_var_array_index}][{self.tokens[self.index].key}] = {input_cast}\n"
+                self.index += 2
+            else: 
+                self.stdout += f"{input_var}[{input_var_array_index}] = {input_cast}\n"
+                self.index += 1
         else:
             self.stdout += f"{input_var} = {input_cast}\n"
  
