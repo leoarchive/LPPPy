@@ -58,6 +58,7 @@ class Lexer:
         TokenKeys.enquanto,
         TokenKeys.fim_enquanto,
         TokenKeys.procedimento,
+        TokenKeys.null,
     ]
     keyChars = [
         TokenKeys.minus,
@@ -174,6 +175,8 @@ class Lexer:
 
         if self.isAlphaOrOP(key):
             token = self.lex_alpha()
+            if token.key == TokenKeys.null:
+                token = Token("0", TokenTypes.numb, self.line)
             if token:
                 return token
 

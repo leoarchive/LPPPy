@@ -65,6 +65,7 @@ class TokenKeys:
     enquanto = "enquanto"
     fim_enquanto = "fim_enquanto"
     procedimento = "procedimento"
+    null = "null"
 
 class TokenTypes(Enum):
     id = 1
@@ -104,6 +105,7 @@ class TokenTypes(Enum):
     fim_enquanto = 35
     procedimento = 36
     call = 37
+    null = 38
 
 
 class Token:

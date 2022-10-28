@@ -1,0 +1,17 @@
+programa dmenor
+var
+	numero,menor,menor2:real
+início
+	numero ← 1
+	para numero de 1 até 4 passo 1 faça
+		escreva "digite a primeira nota"
+		leia menor 
+		se (menor2 = null) então
+			menor2 ← menor
+		fim_se
+		se (menor2 > menor) então
+			menor2 ← menor
+		fim_se
+	fim_para
+	escreva "a menor nota é"+menor2
+fim  
