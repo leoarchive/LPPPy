@@ -1,0 +1,32 @@
+programa CALCULADORA
+var
+  OPCAO: caractere
+
+  início
+    OPCAO ← "0"
+    enquanto (OPCAO <> "5") faça
+      escreva "1 - Adição"
+      escreva "2 - Subtração"
+      escreva "3 - Multiplicação"
+      escreva "4 - Divisão"
+      escreva "5 - Fim de Programa"
+      escreva "Escolha um opção"
+      leia OPCAO
+      se (OPCAO = "1") então
+        escreva "1 - Adição"
+      fim_se
+      se (OPCAO = "2") então
+        escreva "2 - Subtração"
+      fim_se
+      se (OPCAO = "3") então
+        escreva "3 - Multiplicação"
+      fim_se
+      se (OPCAO = "4") então
+        escreva "4 - Divisão"
+      fim_se
+    fim_enquanto
+  fim
+
+
+
+
