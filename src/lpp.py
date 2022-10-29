@@ -14,25 +14,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from transpiler.main import Transpiler
+from compiler.main import Compiler
 from pathlib import Path
 import sys
 import os
 
 
 class LPP:
-    transpiler = None
+    compiler = None
     file = sys.argv[1]
 
     def __init__(self):
-        self.transpiler = Transpiler(Path(self.file).read_text())
-        self.transpiler.run()
+        self.compiler = Compiler(Path(self.file).read_text())
+        self.compiler.run()
 
         if not os.path.exists("build"):
             os.mkdir("build")
 
         build = open(f"build/{Path(self.file).name.split('.')[0]}.py", "w")
-        build.write(self.transpiler.stdout)
+        build.write(self.compiler.stdout)
         build.close
 
 

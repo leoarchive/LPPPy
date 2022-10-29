@@ -22,7 +22,7 @@ import timeit
 from datetime import datetime
 
 
-class Transpiler:
+class Compiler:
     startTime = timeit.default_timer()
     stdin = ""
     stdout = ""
