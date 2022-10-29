@@ -57,9 +57,46 @@ class Parser:
         while token.type == TokenTypes.procedimento:
             self.eatToken(token, TokenTypes.procedimento)
             token = self.lexer.lex()
-            self.symtab.push(token, TokenTypes.call)
+            self.symtab.push(token, TokenTypes.procedimento)
             self.eatToken(token, TokenTypes.id)
             token = self.lexer.lex()
+
+            if token.type == TokenTypes.var:
+                self.eatToken(token, TokenTypes.var)
+                token = self.lexer.lex()
+
+            token = self.parseProcedimento(token)
+            self.eatToken(token, TokenTypes.fim)
+            token = self.lexer.lex()
+
+        while token.type == TokenTypes.funcao:
+            self.eatToken(token, TokenTypes.funcao)
+            token = self.lexer.lex()
+            self.symtab.push(token, TokenTypes.funcao)
+            self.eatToken(token, TokenTypes.id)
+            self.eatToken(self.lexer.lex(), TokenTypes.lParen)
+
+            token = self.lexer.lex()
+            while token.type != TokenTypes.rParen:
+                self.eatToken(token, TokenTypes.id)
+                token = self.lexer.lex()
+                
+                if token.type == TokenTypes.colon:
+                    self.eatToken(token, TokenTypes.colon)
+                    self.eatToken(self.lexer.lex(), TokenTypes.dType)
+
+                if token.type == TokenTypes.comma:
+                    self.eatToken(token, TokenTypes.comma)
+
+                token = self.lexer.lex()
+
+            self.eatToken(token, TokenTypes.rParen)
+            
+            token = self.lexer.lex()
+            if token.type == TokenTypes.colon:
+                self.eatToken(token, TokenTypes.colon)
+                self.eatToken(self.lexer.lex(), TokenTypes.dType)
+                token = self.lexer.lex()
 
             if token.type == TokenTypes.var:
                 self.eatToken(token, TokenTypes.var)

@@ -1,0 +1,85 @@
+programa CALCULADORA
+função ROTSOMA(A,B: real)
+var
+  R:real
+início
+  escreva "Rotina de Adição"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A + B
+  escreva "A soma de A com B é = ", R
+fim
+
+função ROTSUBTRACAO(A,B: real)
+var
+  R:real
+início
+  escreva "Rotina de Subtração"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A - B
+  escreva "A subtração de A com B é = ", R
+fim
+
+função ROTMULTIPLICACAO(A,B: real)
+var
+  R:real
+início
+  escreva "Rotina de Multiplicação"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A * B
+  escreva "A multiplicação de A com B é = ", R
+fim
+
+função ROTDIVISAO(A,B: real)
+var
+  R:real
+início
+  escreva "Rotina de Divisão"
+  escreva "Entre um valor para A: "
+  leia A
+  escreva "Entre um valor para B: "
+  leia B
+  R ← A / B
+  escreva "A divisão de A com B é = ", R
+fim
+
+var
+  OPCAO: caractere
+
+
+  início
+    OPCAO ← "0"
+    enquanto (OPCAO <> "5") faça
+      escreva "1 - Adição"
+      escreva "2 - Subtração"
+      escreva "3 - Multiplicação"
+      escreva "4 - Divisão"
+      escreva "5 - Fim de Programa"
+      escreva "Escolha um opção"
+      leia OPCAO
+      se (OPCAO = "1") então
+        ROTSOMA
+      fim_se
+      se (OPCAO = "2") então
+        ROTSUBTRACAO
+      fim_se
+      se (OPCAO = "3") então
+        ROTMULTIPLICACAO
+      fim_se
+      se (OPCAO = "4") então
+        ROTDIVISAO
+      fim_se
+    fim_enquanto
+  fim
+
+
+
+

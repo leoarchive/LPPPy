@@ -58,6 +58,7 @@ class Lexer:
         TokenKeys.fim_enquanto,
         TokenKeys.procedimento,
         TokenKeys.null,
+        TokenKeys.funcao,
     ]
     keyChars = [
         TokenKeys.mod,

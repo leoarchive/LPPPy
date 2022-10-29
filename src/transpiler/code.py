@@ -37,7 +37,17 @@ class CodeGen:
  
         self.gen()
 
-    def getDType(self, key, size, matrix, _keytype):
+    def getDType(self, key):
+        if key == TokenKeys.caractere:
+            return "str"
+        elif key == TokenKeys.inteiro:
+            return "int"
+        elif key == TokenKeys.real:
+            return "float"
+        else:
+            return "None"
+
+    def getAssigDType(self, key, size, matrix, _keytype):
         if key == TokenKeys.caractere:
             return "''"
         elif key == TokenKeys.inteiro:
@@ -105,6 +115,40 @@ class CodeGen:
             self.index += 1
             self.level -= 1
 
+        while self.tokens[self.index].key == TokenKeys.funcao:
+            self.stdout += "\ndef "
+            self.index += 1
+            self.stdout += f"{self.tokens[self.index].key}("
+            self.index += 1
+            self.index += 1
+
+            while self.tokens[self.index].key != TokenKeys.rParen:
+                self.stdout += self.tokens[self.index].key
+                self.index += 1
+                
+                if self.tokens[self.index].type == TokenTypes.dType:
+                    self.stdout += ": "
+                    self.stdout += self.getDType(self.tokens[self.index].key)
+                    self.index += 1
+
+                if self.tokens[self.index].key == TokenKeys.comma:
+                    self.stdout += ", "
+                    self.index += 1
+
+            self.stdout += ")"
+            self.index += 1
+            self.level += 1
+
+            if self.tokens[self.index].type == TokenTypes.dType:
+                self.stdout += f" -> {self.getDType(self.tokens[self.index].key)}:\n"
+                self.index += 1
+            else:
+                self.stdout += f" -> None:\n"
+
+            self.genProcedimento()
+            self.index += 1
+            self.level -= 1
+
         self.stdout += "\n# var\n"
         self.genVarBlock()
 
@@ -112,10 +156,10 @@ class CodeGen:
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 if self.tokens[self.index + 5].type == TokenTypes.comma:
-                    self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, True, self.tokens[self.index + 9].key)}\n"
+                    self.stdout += f"{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, True, self.tokens[self.index + 9].key)}\n"
                     self.index += 8
                 else:
-                    self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
+                    self.stdout += f"{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
                     self.index += 5
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
@@ -135,7 +179,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -147,7 +191,7 @@ class CodeGen:
 
                     for x in range(0, contents):
                         self.stdout += (
-                            f"{self.getDType(self.tokens[self.index].key, 0, False, None)}"
+                            f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
                         )
                         if x < contents - 1:
                             self.stdout += ", "
@@ -156,7 +200,7 @@ class CodeGen:
                     self.index -= 1
 
             else:
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
 
@@ -166,7 +210,7 @@ class CodeGen:
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 self.stdout += "\t"
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
                 self.index += 5
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
@@ -187,7 +231,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += f"{self.getDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -199,7 +243,7 @@ class CodeGen:
 
                     for x in range(0, contents):
                         self.stdout += (
-                            f"{self.getDType(self.tokens[self.index].key, 0, False, None)}"
+                            f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
                         )
                         if x < contents - 1:
                             self.stdout += ", "
@@ -209,7 +253,7 @@ class CodeGen:
 
             else:
                 self.stdout += "\t"
-                self.stdout += f"{self.tokens[self.index].key} = {self.getDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
+                self.stdout += f"{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
 
@@ -474,7 +518,7 @@ class CodeGen:
 
     def genId(self):
         dtype = self.symtab.getType(self.tokens[self.index].key)
-        if dtype == TokenTypes.call:
+        if dtype == TokenTypes.procedimento:
             self.stdout += f"{self.tokens[self.index].key}()\n"
 
         else: 

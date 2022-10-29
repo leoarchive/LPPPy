@@ -66,6 +66,7 @@ class TokenKeys:
     fim_enquanto = "fim_enquanto"
     procedimento = "procedimento"
     null = "nulo"
+    funcao = "função"
 
 class TokenTypes(Enum):
     id = 1
@@ -104,8 +105,8 @@ class TokenTypes(Enum):
     enquanto = 34
     fim_enquanto = 35
     procedimento = 36
-    call = 37
-    null = 38
+    null = 37
+    funcao = 38
 
 
 class Token:
@@ -173,6 +174,8 @@ class Token:
             return TokenTypes.fim_enquanto
         elif key == TokenKeys.procedimento:
             return TokenTypes.procedimento
+        elif key == TokenKeys.funcao:
+            return TokenTypes.funcao
         elif key == TokenKeys.faca:
             return TokenTypes.faca
         elif (
