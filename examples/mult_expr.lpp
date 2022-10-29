@@ -1,0 +1,37 @@
+programa PESQUISA_SEQUENCIAL
+
+var
+  NOME: conjunto[1..10] de caractere
+  I: inteiro
+  PESQ, RESP: caractere
+  acha: lógico
+
+início
+  para I de 1 até 10 passo 1 faça
+    leia NOME[I]
+  fim_para
+
+  RESP ← "SIM"
+  enquanto (RESP = "SIM") faça
+    escreva "Entre o nome a ser pesquisado: "
+    leia PESQ
+    I ← 1
+    ACHA ← .Falso.
+    enquanto (I <= 10) .E. (ACHA = .Falso.) faça
+      se (PESQ = NOME[I]) então
+        ACHA ← .Verdadeiro.
+      senão
+        I ← I + 1
+      fim_se
+    fim_enquanto
+    
+    se (ACHA = .Verdadeiro.) então
+      escreva PESQ, " foi localizado na posição ", I
+    senão
+      escreva PESQ, " não foi localizado"
+    fim_se
+
+    escreva "Deseja continuar? "
+    leia RESP
+  fim_enquanto
+fim

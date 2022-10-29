@@ -55,10 +55,16 @@ class Lexer:
         TokenKeys.passo,
         TokenKeys.faca,
         TokenKeys.enquanto,
-        TokenKeys.fim_enquanto,
+        TokenKeys.fimenq,
         TokenKeys.procedimento,
         TokenKeys.null,
         TokenKeys.funcao,
+        TokenKeys.tipo,
+        TokenKeys.registro,
+        TokenKeys.fimreg,
+        TokenKeys.logico,
+        TokenKeys.falso,
+        TokenKeys.verdadeiro,
     ]
     keyChars = [
         TokenKeys.mod,
@@ -171,6 +177,11 @@ class Lexer:
 
         if key == ".":
             token = self.lex_dotwords()
+            if token.key == TokenKeys.falso:
+                token = Token("0", TokenTypes.numb, self.line)
+            elif token.key == TokenKeys.verdadeiro:
+                token = Token("1", TokenTypes.numb, self.line)
+
             if token:
                 return token
 

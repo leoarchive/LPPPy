@@ -1,0 +1,12 @@
+programa estrutura_tipo
+tipo
+  EXEMPLO = registro
+    EX1: caractere
+    EX2: real
+    EX3: real
+    EX4: real
+  fim_registro
+var
+  EXP: EXEMPLO
+início
+fim

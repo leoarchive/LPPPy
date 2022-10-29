@@ -17,11 +17,7 @@
 from .error import Error, ErrorTypes
 from .token import TokenKeys, TokenTypes
 
-# Não há necessidade de armazenar tokens que não serão necessários para
-# a geracão do código final, tal qual 'programa', 'var', ':', '[', ...
-#
-# Caso no decorrer do desenvolvimento haja necessidade, a geracão de código
-# python deve ser inteiramente refatorada.
+
 class Parser:
     token = None
     lexer = None
@@ -265,7 +261,7 @@ class Parser:
     def parseEnquantoBlock(self):
         token = self.lexer.lex()
         while True:
-            if token.type == TokenTypes.fim_enquanto:
+            if token.type == TokenTypes.fimenq:
                 return token
             elif token.type == TokenTypes.id:
                 token = self.parseId(token)
@@ -374,10 +370,10 @@ class Parser:
 
         self.eatToken(token, TokenTypes.faca)
 
-        if token.type != TokenTypes.fim_enquanto:
+        if token.type != TokenTypes.fimenq:
             token = self.parseEnquantoBlock()
 
-        self.eatToken(token, TokenTypes.fim_enquanto)
+        self.eatToken(token, TokenTypes.fimenq)
         return self.lexer.lex()
 
     def parsePara(self, token):

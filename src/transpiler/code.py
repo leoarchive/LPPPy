@@ -17,11 +17,7 @@
 from .token import TokenKeys, TokenTypes
 from .error import Error, ErrorTypes
 
-# Alguns tokens não são armazenados no array final de tokens (self.tokens),
-# no parser os tokens que são ignorados estão presentes no array 'ignore'.
-#
-# Saber os tokens que são ignorados é necessários para iterar o array 'tokens'
-# e dar saida (stdout) ao seu respectivo código em linguagem python.
+
 class CodeGen:
     symtab = None
     tokens = []
@@ -44,6 +40,8 @@ class CodeGen:
             return "int"
         elif key == TokenKeys.real:
             return "float"
+        elif key == TokenKeys.logico:
+            return "bool"
         else:
             return "None"
 
@@ -54,6 +52,8 @@ class CodeGen:
             return "0"
         elif key == TokenKeys.real:
             return "0.0"
+        elif key == TokenKeys.logico:
+            return "False"
         elif key == TokenKeys.conjunto:
             if _keytype == TokenKeys.caractere:
                 if matrix:
@@ -62,7 +62,7 @@ class CodeGen:
                     return f"[''] * {size}"
                 else:
                     return "['']"
-            elif _keytype == TokenKeys.inteiro:
+            elif _keytype == TokenKeys.inteiro or _keytype == TokenKeys.logico:
                 if matrix and size:
                     return f"[[0 for _ in range({size})] for _ in range({size})]"
                 elif size:
@@ -411,7 +411,7 @@ class CodeGen:
             for i in range(self.level):
                 self.stdout += "\t"
 
-            if token.type == TokenTypes.fim_enquanto:
+            if token.type == TokenTypes.fimenq:
                 self.stdout = self.stdout[:-1]
                 break
             elif token.type == TokenTypes.leia:
@@ -487,8 +487,8 @@ class CodeGen:
 
         self.level -= 1
         self.index += 1
-        if not self.level:
-            self.stdout += "\n"
+        # if not self.level:
+        self.stdout += "\n"
 
     def genVarAssign(self):
         self.index += 1

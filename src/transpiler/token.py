@@ -63,10 +63,16 @@ class TokenKeys:
     mod = "%"
     exponent = "↑"
     enquanto = "enquanto"
-    fim_enquanto = "fim_enquanto"
+    fimenq = "fim_enquanto"
     procedimento = "procedimento"
     null = "nulo"
     funcao = "função"
+    tipo = "tipo"
+    registro = "registro"
+    fimreg = "fim_registro"
+    logico = "lógico"
+    falso = ".Falso."
+    verdadeiro = ".Verdadeiro."
 
 
 class TokenTypes(Enum):
@@ -104,10 +110,16 @@ class TokenTypes(Enum):
     faca = 32
     exponent = 33
     enquanto = 34
-    fim_enquanto = 35
+    fimenq = 35
     procedimento = 36
     null = 37
     funcao = 38
+    tipo = 39
+    registro = 40
+    fimreg = 41
+    logico = 42
+    falso = 43
+    verdadeiro = 44
 
 
 class Token:
@@ -137,6 +149,10 @@ class Token:
             return TokenTypes.se
         elif key == TokenKeys.entao:
             return TokenTypes.entao
+        elif key == TokenKeys.tipo:
+            return TokenTypes.tipo
+        elif key == TokenKeys.registro:
+            return TokenTypes.registro
         elif key == TokenKeys.senao:
             return TokenTypes.senao
         elif key == TokenKeys.fimse:
@@ -171,8 +187,8 @@ class Token:
             return TokenTypes.passo
         elif key == TokenKeys.enquanto:
             return TokenTypes.enquanto
-        elif key == TokenKeys.fim_enquanto:
-            return TokenTypes.fim_enquanto
+        elif key == TokenKeys.fimenq:
+            return TokenTypes.fimenq
         elif key == TokenKeys.procedimento:
             return TokenTypes.procedimento
         elif key == TokenKeys.funcao:
@@ -184,6 +200,7 @@ class Token:
             or key == TokenKeys.real
             or key == TokenKeys.inteiro
             or key == TokenKeys.conjunto
+            or key == TokenKeys.logico
         ):
             return TokenTypes.dType
         elif (
