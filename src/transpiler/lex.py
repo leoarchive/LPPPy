@@ -129,7 +129,12 @@ class Lexer:
 
     def lex_number(self):
         start = self.index
-        while len(self.stdin) > self.index and (self.stdin[self.index].isnumeric() or (self.stdin[self.index] == '.' and self.stdin[self.index + 1].isnumeric())):
+        while len(self.stdin) > self.index and (
+            self.stdin[self.index].isnumeric()
+            or (
+                self.stdin[self.index] == "." and self.stdin[self.index + 1].isnumeric()
+            )
+        ):
             self.index += 1
 
         key = self.stdin[start : self.index]

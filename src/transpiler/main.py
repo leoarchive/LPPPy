@@ -21,6 +21,7 @@ from .symtab import Symtab
 import timeit
 from datetime import datetime
 
+
 class Transpiler:
     startTime = timeit.default_timer()
     stdin = ""
@@ -49,5 +50,8 @@ class Transpiler:
 #           │ Comp. time  │ %.10f s.     │
 #           └─────────────┴─────────────────────┘
 # +-------------------------------------------------------+
-"""% (datetime.today().strftime('%d/%m/%Y %H:%M:%S'), timeit.default_timer() - self.startTime)
+""" % (
+            datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
+            timeit.default_timer() - self.startTime,
+        )
         self.stdout = header + self.codegen.stdout

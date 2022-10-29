@@ -34,7 +34,7 @@ class CodeGen:
 
     def run(self, tokens):
         self.tokens = tokens
- 
+
         self.gen()
 
     def getDType(self, key):
@@ -56,21 +56,33 @@ class CodeGen:
             return "0.0"
         elif key == TokenKeys.conjunto:
             if _keytype == TokenKeys.caractere:
-                if matrix: return f"[['' for _ in range({size})] for _ in range({size})]"
-                elif size: return f"[''] * {size}"
-                else: return "['']"
+                if matrix:
+                    return f"[['' for _ in range({size})] for _ in range({size})]"
+                elif size:
+                    return f"[''] * {size}"
+                else:
+                    return "['']"
             elif _keytype == TokenKeys.inteiro:
-                if matrix and size: return f"[[0 for _ in range({size})] for _ in range({size})]"
-                elif size: return f"[0] * {size}"
-                else: return "[0]"
+                if matrix and size:
+                    return f"[[0 for _ in range({size})] for _ in range({size})]"
+                elif size:
+                    return f"[0] * {size}"
+                else:
+                    return "[0]"
             elif _keytype == TokenKeys.real:
-                if matrix: return f"[[0.0 for _ in range({size})] for _ in range({size})]"
-                elif size: return f"[0.0] * {size}"
-                else: return "[0.0]"
+                if matrix:
+                    return f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                elif size:
+                    return f"[0.0] * {size}"
+                else:
+                    return "[0.0]"
             else:
-                if matrix: return f"[0][0]"
-                elif size: return f"[] * {size}"
-                else: return "[]"
+                if matrix:
+                    return f"[0][0]"
+                elif size:
+                    return f"[] * {size}"
+                else:
+                    return "[]"
 
     def getInputCast(self, key):
         type = self.symtab.getType(key)
@@ -125,7 +137,7 @@ class CodeGen:
             while self.tokens[self.index].key != TokenKeys.rParen:
                 self.stdout += self.tokens[self.index].key
                 self.index += 1
-                
+
                 if self.tokens[self.index].type == TokenTypes.dType:
                     self.stdout += ": "
                     self.stdout += self.getDType(self.tokens[self.index].key)
@@ -190,9 +202,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += (
-                            f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
-                        )
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -242,9 +252,7 @@ class CodeGen:
                     self.stdout += " = "
 
                     for x in range(0, contents):
-                        self.stdout += (
-                            f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
-                        )
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
                         if x < contents - 1:
                             self.stdout += ", "
 
@@ -311,7 +319,7 @@ class CodeGen:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-          
+
             for i in range(self.level):
                 self.stdout += "\t"
 
@@ -340,15 +348,15 @@ class CodeGen:
 
         self.index += 1
         if self.tokens[self.index].type == TokenTypes.lSquare:
-            self.stdout += '['
+            self.stdout += "["
             self.index += 1
             self.stdout += f"{self.tokens[self.index].key}"
             self.index += 1
-            self.stdout += ']'
+            self.stdout += "]"
 
             if self.tokens[self.index].type == TokenTypes.comma:
                 self.index += 1
-                self.stdout += f'[{self.tokens[self.index].key}]'
+                self.stdout += f"[{self.tokens[self.index].key}]"
                 self.index += 1
 
             self.index += 1
@@ -364,7 +372,7 @@ class CodeGen:
                 self.stdout += "else:"
                 self.index += 1
                 self.genSeBLock()
-                
+
         self.stdout += "\n"
         self.level -= 1
         self.index += 1
@@ -373,7 +381,7 @@ class CodeGen:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
-            
+
             for i in range(self.level):
                 self.stdout += "\t"
 
@@ -441,7 +449,7 @@ class CodeGen:
             range_start = self.tokens[self.index].key
             self.index += 1
             aux_stdout = self.stdout
-            self.stdout = ''
+            self.stdout = ""
             self.genExp()
             exp = self.stdout
             range_start += exp
@@ -487,31 +495,35 @@ class CodeGen:
         self.stdout += " = "
 
         while self.tokens[self.index].type == TokenTypes.lParen:
-            self.stdout += '('
+            self.stdout += "("
             self.index += 1
 
         while self.tokens[self.index].type == TokenTypes.rParen:
-            self.stdout += ')'
+            self.stdout += ")"
             self.index += 1
 
         self.stdout += self.tokens[self.index].key
 
         self.index += 1
         if self.tokens[self.index].type == TokenTypes.lSquare:
-            self.stdout += '['
+            self.stdout += "["
             self.index += 1
             self.stdout += f"{self.tokens[self.index].key}"
             self.index += 1
-            self.stdout += ']'
+            self.stdout += "]"
 
             if self.tokens[self.index].type == TokenTypes.comma:
                 self.index += 1
-                self.stdout += f'[{self.tokens[self.index].key}]'
+                self.stdout += f"[{self.tokens[self.index].key}]"
                 self.index += 1
 
             self.index += 1
-            
-        if self.tokens[self.index].type == TokenTypes.mathOps or self.tokens[self.index].type == TokenTypes.lParen or self.tokens[self.index].type == TokenTypes.rParen:
+
+        if (
+            self.tokens[self.index].type == TokenTypes.mathOps
+            or self.tokens[self.index].type == TokenTypes.lParen
+            or self.tokens[self.index].type == TokenTypes.rParen
+        ):
             self.genExp()
 
         self.stdout += "\n"
@@ -529,25 +541,25 @@ class CodeGen:
                     self.stdout += self.tokens[self.index].key
                     self.index += 1
                     if self.tokens[self.index].type == TokenTypes.comma:
-                        self.stdout += ', '
+                        self.stdout += ", "
                         self.index += 1
                 self.index += 1
-            self.stdout += ')\n'
+            self.stdout += ")\n"
 
-        else: 
+        else:
             self.stdout += self.tokens[self.index].key
             self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.lSquare:
-            self.stdout += '['
+            self.stdout += "["
             self.index += 1
             self.stdout += f"{self.tokens[self.index].key}"
             self.index += 1
-            self.stdout += ']'
+            self.stdout += "]"
 
             if self.tokens[self.index].type == TokenTypes.comma:
                 self.index += 1
-                self.stdout += f'[{self.tokens[self.index].key}]'
+                self.stdout += f"[{self.tokens[self.index].key}]"
                 self.index += 1
 
             self.index += 1
@@ -557,7 +569,7 @@ class CodeGen:
 
     def genExp(self):
         while self.tokens[self.index].type == TokenTypes.lParen:
-            self.stdout += '('
+            self.stdout += "("
             self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.logicalOps:
@@ -566,11 +578,11 @@ class CodeGen:
 
                 self.index += 1
                 while self.tokens[self.index].type == TokenTypes.lParen:
-                    self.stdout += '('
+                    self.stdout += "("
                     self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.rParen:
-                    self.stdout += ')'
+                    self.stdout += ")"
                     self.index += 1
 
                 if self.tokens[self.index].type == TokenTypes.str:
@@ -586,25 +598,25 @@ class CodeGen:
 
                     self.index += 1
                     if self.tokens[self.index].type == TokenTypes.lSquare:
-                        self.stdout += '['
+                        self.stdout += "["
                         self.index += 1
                         self.stdout += f"{self.tokens[self.index].key}"
                         self.index += 1
-                        self.stdout += ']'
+                        self.stdout += "]"
 
                         if self.tokens[self.index].type == TokenTypes.comma:
                             self.index += 1
-                            self.stdout += f'[{self.tokens[self.index].key}]'
+                            self.stdout += f"[{self.tokens[self.index].key}]"
                             self.index += 1
 
                         self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.lParen:
-                    self.stdout += '('
+                    self.stdout += "("
                     self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.rParen:
-                    self.stdout += ')'
+                    self.stdout += ")"
                     self.index += 1
 
                 if self.tokens[self.index].type == TokenTypes.mathOps:
@@ -616,11 +628,11 @@ class CodeGen:
 
                 self.index += 1
                 while self.tokens[self.index].type == TokenTypes.lParen:
-                    self.stdout += '('
+                    self.stdout += "("
                     self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.rParen:
-                    self.stdout += ')'
+                    self.stdout += ")"
                     self.index += 1
 
                 if self.tokens[self.index].type == TokenTypes.str:
@@ -636,36 +648,36 @@ class CodeGen:
                     self.index += 1
 
                     if self.tokens[self.index].type == TokenTypes.lSquare:
-                        self.stdout += '['
+                        self.stdout += "["
                         self.index += 1
                         self.stdout += f"{self.tokens[self.index].key}"
                         self.index += 1
-                        self.stdout += ']'
+                        self.stdout += "]"
 
                         if self.tokens[self.index].type == TokenTypes.comma:
                             self.index += 1
-                            self.stdout += f'[{self.tokens[self.index].key}]'
+                            self.stdout += f"[{self.tokens[self.index].key}]"
                             self.index += 1
 
                         self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.lParen:
-                    self.stdout += '('
+                    self.stdout += "("
                     self.index += 1
 
                 while self.tokens[self.index].type == TokenTypes.rParen:
-                    self.stdout += ')'
+                    self.stdout += ")"
                     self.index += 1
 
                 if self.tokens[self.index].type == TokenTypes.logicalOps:
                     self.genExp()
 
         while self.tokens[self.index].type == TokenTypes.lParen:
-            self.stdout += '('
+            self.stdout += "("
             self.index += 1
 
         while self.tokens[self.index].type == TokenTypes.rParen:
-            self.stdout += ')'
+            self.stdout += ")"
             self.index += 1
 
     def genLeia(self):
@@ -690,27 +702,27 @@ class CodeGen:
                 self.index += 1
                 self.stdout += f"{input_var}[{input_var_array_index}][{self.tokens[self.index].key}] = {input_cast}\n"
                 self.index += 2
-            else: 
+            else:
                 self.stdout += f"{input_var}[{input_var_array_index}] = {input_cast}\n"
                 self.index += 1
         else:
             self.stdout += f"{input_var} = {input_cast}\n"
- 
+
     def genEscreva(self):
         self.index += 1
         self.stdout += f"print({self.tokens[self.index].key}"
         self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.lSquare:
-            self.stdout += '['
+            self.stdout += "["
             self.index += 1
             self.stdout += f"{self.tokens[self.index].key}"
             self.index += 1
-            self.stdout += ']'
+            self.stdout += "]"
 
             if self.tokens[self.index].type == TokenTypes.comma:
                 self.index += 1
-                self.stdout += f'[{self.tokens[self.index].key}]'
+                self.stdout += f"[{self.tokens[self.index].key}]"
                 self.index += 1
 
             self.index += 1

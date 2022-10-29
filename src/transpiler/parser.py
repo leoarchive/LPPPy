@@ -80,7 +80,7 @@ class Parser:
             while token.type != TokenTypes.rParen:
                 self.eatToken(token, TokenTypes.id)
                 token = self.lexer.lex()
-                
+
                 if token.type == TokenTypes.colon:
                     self.eatToken(token, TokenTypes.colon)
                     self.eatToken(self.lexer.lex(), TokenTypes.dType)
@@ -91,7 +91,7 @@ class Parser:
                 token = self.lexer.lex()
 
             self.eatToken(token, TokenTypes.rParen)
-            
+
             token = self.lexer.lex()
             if token.type == TokenTypes.colon:
                 self.eatToken(token, TokenTypes.colon)
@@ -105,7 +105,7 @@ class Parser:
             token = self.parseProcedimento(token)
             self.eatToken(token, TokenTypes.fim)
             token = self.lexer.lex()
-        
+
         self.eatToken(token, TokenTypes.var)
         self.parseVarBlock(self.lexer.lex())
 
@@ -113,7 +113,7 @@ class Parser:
         if token.type == TokenTypes.inicio:
             self.eatToken(token, TokenTypes.inicio)
             return self.parseInicio()
-             
+
         self.eatToken(token, TokenTypes.id)
 
         _symtokens = []
@@ -150,7 +150,7 @@ class Parser:
             self.eatToken(token, TokenTypes.rSquare)
             self.eatToken(self.lexer.lex(), TokenTypes.de)
             token = self.lexer.lex()
-        
+
             _symtype = token.key
             self.eatToken(token, TokenTypes.dType)
 
@@ -163,7 +163,7 @@ class Parser:
         if token.type == TokenTypes.inicio:
             self.eatToken(token, TokenTypes.inicio)
             return self.parseProcedimentoBlock()
-    
+
         self.eatToken(token, TokenTypes.id)
 
         _symtokens = []
@@ -193,7 +193,7 @@ class Parser:
             self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
             self.eatToken(self.lexer.lex(), TokenTypes.de)
             token = self.lexer.lex()
-        
+
             _symtype = token.key
             self.eatToken(token, TokenTypes.dType)
 
@@ -329,11 +329,11 @@ class Parser:
         elif token.type == TokenTypes.str:
             self.eatToken(token, TokenTypes.str)
             token = self.lexer.lex()
- 
+
         token = self.parseExp(token)
 
         self.eatToken(token, TokenTypes.entao)
-  
+
         while token.type != TokenTypes.fimse:
             token = self.parseSeBlock()
             if token.type == TokenTypes.senao:
@@ -369,11 +369,11 @@ class Parser:
         elif token.type == TokenTypes.str:
             self.eatToken(token, TokenTypes.str)
             token = self.lexer.lex()
- 
+
         token = self.parseExp(token)
 
         self.eatToken(token, TokenTypes.faca)
-  
+
         if token.type != TokenTypes.fim_enquanto:
             token = self.parseEnquantoBlock()
 
@@ -392,7 +392,11 @@ class Parser:
             self.eatToken(token, TokenTypes.id)
 
         token = self.lexer.lex()
-        if token.type == TokenTypes.mathOps or token.type == TokenTypes.lParen or token.type == TokenTypes.rParen:
+        if (
+            token.type == TokenTypes.mathOps
+            or token.type == TokenTypes.lParen
+            or token.type == TokenTypes.rParen
+        ):
             token = self.parseExp(token)
 
         self.eatToken(token, TokenTypes.ate)
@@ -424,13 +428,13 @@ class Parser:
 
             self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
             token = self.lexer.lex()
-            
+
         if token.type == TokenTypes.rArrow:
             token = self.parseVarAssign(token)
         elif token.type == TokenTypes.lParen:
             self.eatToken(token, TokenTypes.lParen)
             token = self.lexer.lex()
-     
+
             while token.type != TokenTypes.rParen:
                 if token.type == TokenTypes.numb:
                     self.eatToken(token, TokenTypes.numb)
@@ -439,7 +443,7 @@ class Parser:
                 elif token.type == TokenTypes.id:
                     self.eatToken(token, TokenTypes.id)
                     token = self.lexer.lex()
-                
+
                     if token.type == TokenTypes.lSquare:
                         self.eatToken(token, TokenTypes.lSquare)
 
@@ -458,10 +462,10 @@ class Parser:
                 elif token.type == TokenTypes.str:
                     self.eatToken(token, TokenTypes.str)
                     token = self.lexer.lex()
-            
+
             self.eatToken(token, TokenTypes.rParen)
             token = self.lexer.lex()
-      
+
         return token
 
     def parseVarAssign(self, token):
@@ -504,8 +508,11 @@ class Parser:
             self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
             token = self.lexer.lex()
 
-  
-        if token.type == TokenTypes.mathOps or token.type == TokenTypes.lParen or token.type == TokenTypes.rParen:
+        if (
+            token.type == TokenTypes.mathOps
+            or token.type == TokenTypes.lParen
+            or token.type == TokenTypes.rParen
+        ):
             token = self.parseExp(token)
 
         return token
@@ -642,7 +649,7 @@ class Parser:
                 else:
                     self.eatToken(token, TokenTypes.numb)
                 token = self.lexer.lex()
-                    
+
             self.eatToken(token, TokenTypes.rSquare)
             token = self.lexer.lex()
 
@@ -686,12 +693,12 @@ class Parser:
                 token = self.lexer.lex()
 
                 if token.type == TokenTypes.comma:
-                    self.eatToken(token, TokenTypes.comma)   
+                    self.eatToken(token, TokenTypes.comma)
                     token = self.lexer.lex()
                     if token.type == TokenTypes.numb:
                         self.eatToken(token, TokenTypes.numb)
                     else:
-                        self.eatToken(token, TokenTypes.id)   
+                        self.eatToken(token, TokenTypes.id)
                     token = self.lexer.lex()
 
                 self.eatToken(token, TokenTypes.rSquare)

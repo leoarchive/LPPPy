@@ -28,11 +28,12 @@ class LPP:
         self.transpiler = Transpiler(Path(self.file).read_text())
         self.transpiler.run()
 
-        if (not os.path.exists('build')):
-            os.mkdir('build')
-        
+        if not os.path.exists("build"):
+            os.mkdir("build")
+
         build = open(f"build/{Path(self.file).name.split('.')[0]}.py", "w")
         build.write(self.transpiler.stdout)
         build.close
+
 
 LPP()

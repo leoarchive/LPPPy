@@ -68,6 +68,7 @@ class TokenKeys:
     null = "nulo"
     funcao = "função"
 
+
 class TokenTypes(Enum):
     id = 1
     numb = 2
