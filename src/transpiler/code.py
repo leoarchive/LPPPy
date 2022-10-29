@@ -518,13 +518,25 @@ class CodeGen:
 
     def genId(self):
         dtype = self.symtab.getType(self.tokens[self.index].key)
-        if dtype == TokenTypes.procedimento:
-            self.stdout += f"{self.tokens[self.index].key}()\n"
+        if dtype == TokenTypes.procedimento or dtype == TokenTypes.funcao:
+            self.stdout += f"{self.tokens[self.index].key}("
+
+            self.index += 1
+            if self.tokens[self.index].type == TokenTypes.lParen:
+
+                self.index += 1
+                while self.tokens[self.index].type != TokenTypes.rParen:
+                    self.stdout += self.tokens[self.index].key
+                    self.index += 1
+                    if self.tokens[self.index].type == TokenTypes.comma:
+                        self.stdout += ', '
+                        self.index += 1
+                self.index += 1
+            self.stdout += ')\n'
 
         else: 
             self.stdout += self.tokens[self.index].key
-
-        self.index += 1
+            self.index += 1
 
         if self.tokens[self.index].type == TokenTypes.lSquare:
             self.stdout += '['
@@ -684,8 +696,6 @@ class CodeGen:
         else:
             self.stdout += f"{input_var} = {input_cast}\n"
  
-        # self.stdout += "\n"
-
     def genEscreva(self):
         self.index += 1
         self.stdout += f"print({self.tokens[self.index].key}"

@@ -427,7 +427,41 @@ class Parser:
             
         if token.type == TokenTypes.rArrow:
             token = self.parseVarAssign(token)
+        elif token.type == TokenTypes.lParen:
+            self.eatToken(token, TokenTypes.lParen)
+            token = self.lexer.lex()
+     
+            while token.type != TokenTypes.rParen:
+                if token.type == TokenTypes.numb:
+                    self.eatToken(token, TokenTypes.numb)
+                    token = self.lexer.lex()
+
+                elif token.type == TokenTypes.id:
+                    self.eatToken(token, TokenTypes.id)
+                    token = self.lexer.lex()
+                
+                    if token.type == TokenTypes.lSquare:
+                        self.eatToken(token, TokenTypes.lSquare)
+
+                        token = self.lexer.lex()
+                        if token.type == TokenTypes.numb:
+                            self.eatToken(token, TokenTypes.numb)
+                        else:
+                            self.eatToken(token, TokenTypes.id)
+
+                        self.eatToken(self.lexer.lex(), TokenTypes.rSquare)
+                        token = self.lexer.lex()
+                    elif token.type == TokenTypes.comma:
+                        self.eatToken(token, TokenTypes.comma)
+                        token = self.lexer.lex()
+
+                elif token.type == TokenTypes.str:
+                    self.eatToken(token, TokenTypes.str)
+                    token = self.lexer.lex()
             
+            self.eatToken(token, TokenTypes.rParen)
+            token = self.lexer.lex()
+      
         return token
 
     def parseVarAssign(self, token):
