@@ -25,7 +25,6 @@ class Parser:
     tokens = []
     ignore = [
         TokenTypes.programa,
-        TokenTypes.var,
         TokenTypes.colon,
         TokenTypes.dPeriod,
         TokenTypes.de,
@@ -102,6 +101,19 @@ class Parser:
             self.eatToken(token, TokenTypes.fim)
             token = self.lexer.lex()
 
+        if token.type == TokenTypes.tipo:
+            self.eatToken(token, TokenTypes.tipo)
+            token = self.lexer.lex()
+            while token.type != TokenTypes.var:
+                self.symtab.pushDType(token)
+                self.eatToken(token, TokenTypes.id)
+                token = self.lexer.lex()
+                if token.key == TokenKeys.equal:
+                    self.eatToken(token, TokenTypes.logicalOps)
+                    self.eatToken(self.lexer.lex(), TokenTypes.registro)
+                    self.parseRegistro(self.lexer.lex())
+                token = self.lexer.lex()
+
         self.eatToken(token, TokenTypes.var)
         self.parseVarBlock(self.lexer.lex())
 
@@ -110,6 +122,61 @@ class Parser:
             self.eatToken(token, TokenTypes.inicio)
             return self.parseInicio()
 
+        self.eatToken(token, TokenTypes.id)
+
+        _symtokens = []
+        _symtokens.append(token)
+
+        token = self.lexer.lex()
+        if token.type == TokenTypes.comma:
+            while token.type == TokenTypes.comma:
+                self.eatToken(token, TokenTypes.comma)
+                token = self.lexer.lex()
+                _symtokens.append(token)
+                self.eatToken(token, TokenTypes.id)
+                token = self.lexer.lex()
+
+        self.eatToken(token, TokenTypes.colon)
+
+        _symtype = 0
+
+        token = self.lexer.lex()
+        _symtype = token.key
+        if token.type == TokenTypes.id:
+            if self.symtab.checkDType(token.key):
+                self.eatToken(token, TokenTypes.id)
+            else:
+                self.eatToken(token, TokenTypes.dType)
+        else:
+            self.eatToken(token, TokenTypes.dType)
+        if token.key == TokenKeys.conjunto:
+            self.eatToken(self.lexer.lex(), TokenTypes.lSquare)
+            self.eatToken(self.lexer.lex(), TokenTypes.numb)
+            self.eatToken(self.lexer.lex(), TokenTypes.dPeriod)
+            self.eatToken(self.lexer.lex(), TokenTypes.numb)
+            token = self.lexer.lex()
+            if token.type == TokenTypes.comma:
+                self.eatToken(token, TokenTypes.comma)
+                self.eatToken(self.lexer.lex(), TokenTypes.numb)
+                self.eatToken(self.lexer.lex(), TokenTypes.dPeriod)
+                self.eatToken(self.lexer.lex(), TokenTypes.numb)
+                token = self.lexer.lex()
+            self.eatToken(token, TokenTypes.rSquare)
+            self.eatToken(self.lexer.lex(), TokenTypes.de)
+            token = self.lexer.lex()
+
+            _symtype = token.key
+            self.eatToken(token, TokenTypes.dType)
+
+        for _token in _symtokens:
+            self.symtab.push(_token, _symtype)
+
+        self.parseVarBlock(self.lexer.lex())
+
+    def parseRegistro(self, token):
+        if token.type == TokenTypes.fimreg:
+            return self.eatToken(token, TokenTypes.fimreg)
+             
         self.eatToken(token, TokenTypes.id)
 
         _symtokens = []
@@ -153,7 +220,7 @@ class Parser:
         for _token in _symtokens:
             self.symtab.push(_token, _symtype)
 
-        self.parseVarBlock(self.lexer.lex())
+        self.parseRegistro(self.lexer.lex())
 
     def parseProcedimento(self, token):
         if token.type == TokenTypes.inicio:

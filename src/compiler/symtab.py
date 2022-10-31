@@ -14,10 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from compiler.token import Token, TokenTypes
+
+
 class Symtab:
     symbols = []
+    dtypes  = []
 
-    def push(self, token, dtype):
+    def push(self, token: Token, dtype: TokenTypes) -> None:
         self.symbols.append(
             {
                 "token": token,
@@ -25,7 +29,18 @@ class Symtab:
             }
         )
 
-    def getType(self, key):
+    def getType(self, key: str) -> TokenTypes or None:
         for sym in self.symbols:
             if sym["token"].key == key:
                 return sym["dtype"]
+
+    def pushDType(self, token: str) -> None:
+        self.dtypes.append(
+            token
+        )
+    
+    def checkDType(self, key: str) -> bool:
+        for token in self.dtypes:
+            if token.key == key:
+                return True
+        return False

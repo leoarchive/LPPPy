@@ -6,6 +6,11 @@ tipo
     EX3: real
     EX4: real
   fim_registro
+
+  EXEMPLO2 = registro
+    EX1: caractere
+    EX2, EX3, EX4: real
+  fim_registro
 var
   EXP: EXEMPLO
 início

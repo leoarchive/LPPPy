@@ -24,16 +24,24 @@ class CodeGen:
     index = 0
     stdout = ""
     level = 0
+    programName = ""
 
     def __init__(self, symtab):
         self.symtab = symtab
 
     def run(self, tokens):
         self.tokens = tokens
-
         self.gen()
 
+    def importLib(self, lib):
+        stdout = self.stdout
+        self.stdout = f"{lib}\n"
+        self.stdout += stdout
+
     def getDType(self, key):
+        if self.symtab.checkDType(key):
+            return key
+
         if key == TokenKeys.caractere:
             return "str"
         elif key == TokenKeys.inteiro:
@@ -114,14 +122,17 @@ class CodeGen:
             return key
 
     def gen(self):
-        self.stdout = f"# programa {self.tokens[self.index].key}\n"
+        self.programName = self.tokens[self.index].key
         self.index += 1
 
+        if self.tokens[self.index].key == TokenKeys.tipo:
+            self.genRegistro()
+       
         while self.tokens[self.index].key == TokenKeys.procedimento:
             self.stdout += "\ndef "
             self.index += 1
             self.stdout += f"{self.tokens[self.index].key}():\n"
-            self.index += 1
+            self.index += 2
             self.level += 1
             self.genProcedimento()
             self.index += 1
@@ -148,9 +159,9 @@ class CodeGen:
                     self.index += 1
 
             self.stdout += ")"
-            self.index += 1
+            self.index += 2
             self.level += 1
-
+  
             if self.tokens[self.index].type == TokenTypes.dType:
                 self.stdout += f" -> {self.getDType(self.tokens[self.index].key)}:\n"
                 self.index += 1
@@ -162,7 +173,69 @@ class CodeGen:
             self.level -= 1
 
         self.stdout += "\n# var\n"
+        self.index += 1
         self.genVarBlock()
+
+    def genRegistro(self):
+        self.importLib("from dataclasses import dataclass")
+        self.index += 1
+        while self.tokens[self.index].type != TokenTypes.var:
+            self.stdout += f"\n@dataclass\nclass {self.tokens[self.index].key}:\n"
+            self.index += 3
+            self.genRegistroBlock()
+            self.index += 1
+
+    def genRegistroBlock(self):
+        while self.tokens[self.index].type != TokenTypes.fimreg:
+            if self.tokens[self.index + 1].key == TokenKeys.conjunto:
+                if self.tokens[self.index + 5].type == TokenTypes.comma:
+                    self.stdout += f"\t{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, True, self.tokens[self.index + 9].key)}\n"
+                    self.index += 8
+                else:
+                    self.stdout += f"\t{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, self.tokens[self.index + 4].key, False, self.tokens[self.index + 6].key)}\n"
+                    self.index += 5
+
+            elif self.tokens[self.index + 1].key == TokenKeys.comma:
+                contents = 1
+                self.stdout += '\t'
+
+                while True:
+                    self.stdout += self.tokens[self.index].key
+                    if self.tokens[self.index + 1].type == TokenTypes.dType:
+                        self.index += 1
+                        break
+                    else:
+                        contents += 1
+                        self.stdout += ", "
+                        self.index += 2
+
+                if self.tokens[self.index].key == TokenKeys.conjunto:
+                    self.stdout += " = "
+
+                    for x in range(0, contents):
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, self.tokens[self.index + 3].key, False, self.tokens[self.index + 5].key)}"
+                        if x < contents - 1:
+                            self.stdout += ", "
+
+                    self.stdout += "\n"
+                    self.index += 4
+
+                else:
+                    self.stdout += " = "
+
+                    for x in range(0, contents):
+                        self.stdout += f"{self.getAssigDType(self.tokens[self.index].key, 0, False, None)}"
+                        if x < contents - 1:
+                            self.stdout += ", "
+
+                    self.stdout += "\n"
+                    self.index -= 1
+
+            else:
+                self.stdout += f"\t{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
+
+            self.index += 2
+
 
     def genVarBlock(self):
         while self.tokens[self.index].type != TokenTypes.inicio:

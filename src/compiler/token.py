@@ -181,6 +181,8 @@ class Token:
             return TokenTypes.para
         elif key == TokenKeys.fimpara:
             return TokenTypes.fimpara
+        elif key == TokenKeys.fimreg:
+            return TokenTypes.fimreg
         elif key == TokenKeys.ate:
             return TokenTypes.ate
         elif key == TokenKeys.passo:
