@@ -127,12 +127,12 @@ class Token:
     type = 0
     line = 0
 
-    def __init__(self, key, type, line):
+    def __init__(self, key: TokenKeys, type: TokenTypes, line: int) -> None:
         self.key = key
         self.type = type
         self.line = line
 
-    def getType(key):
+    def getType(key: TokenKeys) -> TokenTypes:
         if key == TokenKeys.var:
             return TokenTypes.var
         elif key == TokenKeys.programa:

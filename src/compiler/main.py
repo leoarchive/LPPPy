@@ -31,14 +31,14 @@ class Compiler:
     codegen = None
     symtab = None
 
-    def __init__(self, stdin):
+    def __init__(self, stdin: str) -> None:
         self.stdin = stdin
         self.symtab = Symtab()
         self.lexer = Lexer(stdin)
         self.parser = Parser(self.lexer, self.symtab)
         self.codegen = CodeGen(self.symtab)
 
-    def run(self):
+    def run(self) -> None:
         self.parser.run()
         self.codegen.run(self.parser.tokens)
         header = """# coding: utf-8

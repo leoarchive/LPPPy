@@ -19,11 +19,11 @@ from .token import Token, TokenTypes, TokenKeys
 
 
 class Lexer:
-    stdin = ""
-    index = 0
-    line = 1
+    stdin: str = ""
+    index: int = 0
+    line: int = 1
 
-    keyWords = [
+    keyWords: TokenKeys = [
         TokenKeys.programa,
         TokenKeys.var,
         TokenKeys.leia,
@@ -66,7 +66,7 @@ class Lexer:
         TokenKeys.falso,
         TokenKeys.verdadeiro,
     ]
-    keyChars = [
+    keyChars: TokenKeys = [
         TokenKeys.mod,
         TokenKeys.minus,
         TokenKeys.plus,
@@ -82,12 +82,12 @@ class Lexer:
         TokenKeys.lSquare,
         TokenKeys.exponent,
     ]
-    chars = ["\n"]
+    chars: list[str] = ["\n"]
 
-    def __init__(self, stdin):
+    def __init__(self, stdin: str) -> None:
         self.stdin = stdin
 
-    def lex_dotwords(self):
+    def lex_dotwords(self) -> Token:
         start = self.index
         self.index += 1
 
@@ -103,7 +103,7 @@ class Lexer:
             return token
         return Token(key, TokenTypes.id, self.line)
 
-    def lex_string(self):
+    def lex_string(self) -> Token:
         start = self.index
         self.index += 1
 
@@ -117,7 +117,7 @@ class Lexer:
         key = self.stdin[start : self.index]
         return Token(key, TokenTypes.str, self.line)
 
-    def lex_alpha(self):
+    def lex_alpha(self) -> Token:
         start = self.index
         while (
             self.isAlphaOrOP(self.stdin[self.index])
@@ -133,7 +133,7 @@ class Lexer:
             return token
         return Token(key, TokenTypes.id, self.line)
 
-    def lex_number(self):
+    def lex_number(self) -> Token:
         start = self.index
         while len(self.stdin) > self.index and (
             self.stdin[self.index].isnumeric()
@@ -146,28 +146,28 @@ class Lexer:
         key = self.stdin[start : self.index]
         return Token(key, TokenTypes.numb, self.line)
 
-    def lex_keyword(self, key):
+    def lex_keyword(self, key: str) -> Token:
         for keyWord in self.keyWords:
             if key == keyWord:
                 return Token(key, Token.getType(key), self.line)
 
-    def lex_keychar(self, key):
+    def lex_keychar(self, key: str) -> Token:
         for keyChar in self.keyChars:
             if key == keyChar[0]:
                 self.index += 1
                 return Token(key, Token.getType(key), self.line)
 
-    def lex_chars(self, key):
+    def lex_chars(self, key: str) -> Token:
         for char in self.chars:
             if key == char:
                 if key == "\n":
                     self.line += 1
                     break
 
-    def isAlphaOrOP(self, key):
+    def isAlphaOrOP(self, key: str) -> bool:
         return key.isalpha() or key == "=" or key == "<" or key == ">" or key == "_"
 
-    def lex(self):
+    def lex(self) -> Token or None:
         if len(self.stdin) <= self.index:
             raise Error(
                 ErrorTypes.lexer_unexpected_token, {"key": "eof", "line": self.line}

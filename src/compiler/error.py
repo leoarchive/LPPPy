@@ -16,6 +16,7 @@
 #
 import sys
 from enum import Enum
+from compiler.token import Token
 
 
 class ErrorTypes(Enum):
@@ -25,7 +26,7 @@ class ErrorTypes(Enum):
 
 
 class Error:
-    def __init__(self, type, token):
+    def __init__(self, type: ErrorTypes, token: Token) -> None:
         if not token:
             exit()
         print(
@@ -33,7 +34,7 @@ class Error:
             file=sys.stderr,
         )
 
-    def getMsg(self, type):
+    def getMsg(self, type: ErrorTypes) -> str:
         if type == ErrorTypes.lexer_unexpected_token:
             return "LEXER: token inesperado"
         elif type == ErrorTypes.parser_unexpected_token:

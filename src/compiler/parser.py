@@ -14,37 +14,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from compiler.lex import Lexer
+from compiler.symtab import Symtab
 from .error import Error, ErrorTypes
-from .token import TokenKeys, TokenTypes
+from .token import Token, TokenKeys, TokenTypes
 
 
 class Parser:
-    token = None
-    lexer = None
-    symtab = None
-    tokens = []
-    ignore = [
+    lexer: Lexer = None
+    symtab: Symtab = None
+    tokens: list[Token] = []
+    ignore: list[TokenTypes] = [
         TokenTypes.programa,
         TokenTypes.colon,
         TokenTypes.dPeriod,
         TokenTypes.de,
     ]
 
-    def __init__(self, lexer, symtab):
+    def __init__(self, lexer: Lexer, symtab: Symtab) -> None:
         self.lexer = lexer
         self.symtab = symtab
 
-    def run(self):
+    def run(self) -> None:
         self.parse()
 
-    def eatToken(self, token, expectedType):
+    def eatToken(self, token: Token, expectedType: TokenTypes) -> None:
         if not token or token.type != expectedType:
             raise Error(ErrorTypes.parser_unexpected_token, token)
 
         if not token.type in self.ignore:
             self.tokens.append(token)
 
-    def parse(self):
+    def parse(self) -> None:
         self.eatToken(self.lexer.lex(), TokenTypes.programa)
         self.eatToken(self.lexer.lex(), TokenTypes.id)
         token = self.lexer.lex()
@@ -117,7 +118,7 @@ class Parser:
         self.eatToken(token, TokenTypes.var)
         self.parseVar(self.lexer.lex())
 
-    def parseVar(self, token):
+    def parseVar(self, token: Token) -> None:
         if token.type == TokenTypes.inicio:
             self.eatToken(token, TokenTypes.inicio)
             return self.parseInicio()
@@ -173,7 +174,7 @@ class Parser:
 
         self.parseVar(self.lexer.lex())
 
-    def parseRegistro(self, token):
+    def parseRegistro(self, token: Token) -> None:
         if token.type == TokenTypes.fimreg:
             return self.eatToken(token, TokenTypes.fimreg)
 
@@ -222,7 +223,7 @@ class Parser:
 
         self.parseRegistro(self.lexer.lex())
 
-    def parseProcedimento(self, token):
+    def parseProcedimento(self, token: Token) -> None:
         if token.type == TokenTypes.inicio:
             self.eatToken(token, TokenTypes.inicio)
             return self.parseBlock()
@@ -265,7 +266,7 @@ class Parser:
 
         return self.parseProcedimento(self.lexer.lex())
 
-    def parseInicio(self):
+    def parseInicio(self) -> None:
         token = self.lexer.lex()
         while True:
             if token.type == TokenTypes.fim:
@@ -285,7 +286,7 @@ class Parser:
             else:
                 raise Error(ErrorTypes.parser_unexpected_token, token)
 
-    def parseBlock(self):
+    def parseBlock(self) -> None:
         token = self.lexer.lex()
         while True:
             if (
@@ -311,7 +312,7 @@ class Parser:
             else:
                 raise Error(ErrorTypes.parser_unexpected_token, token)
 
-    def parseSe(self, token):
+    def parseSe(self, token) -> None:
         self.eatToken(token, TokenTypes.se)
         self.eatToken(self.lexer.lex(), TokenTypes.lParen)
 
@@ -351,7 +352,7 @@ class Parser:
         self.eatToken(token, TokenTypes.fimse)
         return self.lexer.lex()
 
-    def parseEnquanto(self, token):
+    def parseEnquanto(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.enquanto)
         self.eatToken(self.lexer.lex(), TokenTypes.lParen)
 
@@ -389,7 +390,7 @@ class Parser:
         self.eatToken(token, TokenTypes.fimenq)
         return self.lexer.lex()
 
-    def parsePara(self, token):
+    def parsePara(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.para)
         self.eatToken(self.lexer.lex(), TokenTypes.id)
         self.eatToken(self.lexer.lex(), TokenTypes.de)
@@ -422,7 +423,7 @@ class Parser:
         self.eatToken(token, TokenTypes.fimpara)
         return self.lexer.lex()
 
-    def parseId(self, token):
+    def parseId(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.id)
 
         token = self.lexer.lex()
@@ -477,7 +478,7 @@ class Parser:
 
         return token
 
-    def parseVarAssign(self, token):
+    def parseVarAssign(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.rArrow)
 
         token = self.lexer.lex()
@@ -526,7 +527,7 @@ class Parser:
 
         return token
 
-    def parseExp(self, token):
+    def parseExp(self, token: Token) -> None:
         while token.type == TokenTypes.lParen:
             self.eatToken(token, TokenTypes.lParen)
             token = self.lexer.lex()
@@ -633,7 +634,7 @@ class Parser:
 
         return token
 
-    def parseLeia(self, token):
+    def parseLeia(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.leia)
         self.eatToken(self.lexer.lex(), TokenTypes.id)
         token = self.lexer.lex()
@@ -664,7 +665,7 @@ class Parser:
 
         return token
 
-    def parseEscreva(self, token):
+    def parseEscreva(self, token: Token) -> None:
         self.eatToken(token, TokenTypes.escreva)
 
         token = self.lexer.lex()

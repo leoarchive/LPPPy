@@ -14,31 +14,32 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
-from .token import TokenKeys, TokenTypes
+from compiler.symtab import Symtab
+from .token import Token, TokenKeys, TokenTypes
 from .error import Error, ErrorTypes
 
 
 class CodeGen:
-    symtab = None
-    tokens = []
-    index = 0
-    stdout = ""
-    level = 0
-    programName = ""
+    symtab: Symtab = None
+    tokens: list[Token] = []
+    index: int = 0
+    stdout: str = ""
+    level: int = 0
+    programName: str = ""
 
-    def __init__(self, symtab):
+    def __init__(self, symtab: Symtab) -> None:
         self.symtab = symtab
 
-    def run(self, tokens):
+    def run(self, tokens: list[Token]):
         self.tokens = tokens
         self.gen()
 
-    def importLib(self, lib):
+    def importLib(self, lib: str) -> None:
         stdout = self.stdout
         self.stdout = f"{lib}\n"
         self.stdout += stdout
 
-    def getDType(self, key):
+    def getDType(self, key: str) -> str:
         if self.symtab.checkDType(key):
             return key
 
@@ -53,7 +54,7 @@ class CodeGen:
         else:
             return "None"
 
-    def getAssigDType(self, key, size, matrix, _keytype):
+    def getAssigDType(self, key: str, size: int, matrix: bool, _keytype: str) -> str:
         if self.symtab.checkDType(key):
             return f"{key}()"
 
@@ -95,7 +96,7 @@ class CodeGen:
                 else:
                     return "[]"
 
-    def getInputCast(self, key):
+    def getInputCast(self, key: str) -> str:
         type = self.symtab.getType(key)
         if type == TokenKeys.inteiro:
             return "int(input())"
@@ -104,7 +105,7 @@ class CodeGen:
         else:
             return "input()"
 
-    def getLogical(self, key):
+    def getLogical(self, key: str) -> str:
         if key == TokenKeys._and:
             return "and"
         elif key == TokenKeys._not:
@@ -118,13 +119,13 @@ class CodeGen:
         else:
             return key
 
-    def getMath(self, key):
+    def getMath(self, key: str) -> str:
         if key == TokenKeys.exponent:
             return "**"
         else:
             return key
 
-    def gen(self):
+    def gen(self) -> None:
         self.programName = self.tokens[self.index].key
         self.index += 1
 
@@ -179,7 +180,7 @@ class CodeGen:
         self.index += 1
         self.genVarBlock()
 
-    def genRegistro(self):
+    def genRegistro(self) -> None:
         self.importLib("from dataclasses import dataclass")
         self.index += 1
         while self.tokens[self.index].type != TokenTypes.var:
@@ -188,7 +189,7 @@ class CodeGen:
             self.genRegistroBlock()
             self.index += 1
 
-    def genRegistroBlock(self):
+    def genRegistroBlock(self) -> None:
         while self.tokens[self.index].type != TokenTypes.fimreg:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 if self.tokens[self.index + 5].type == TokenTypes.comma:
@@ -239,7 +240,7 @@ class CodeGen:
 
             self.index += 2
 
-    def genVarBlock(self):
+    def genVarBlock(self) -> None:
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 if self.tokens[self.index + 5].type == TokenTypes.comma:
@@ -291,7 +292,7 @@ class CodeGen:
 
         self.genInicio()
 
-    def genProcedimento(self):
+    def genProcedimento(self) -> None:
         while self.tokens[self.index].type != TokenTypes.inicio:
             if self.tokens[self.index + 1].key == TokenKeys.conjunto:
                 self.stdout += "\t"
@@ -342,7 +343,7 @@ class CodeGen:
 
         self.genProcedimentoBlock()
 
-    def genInicio(self):
+    def genInicio(self) -> None:
         self.stdout += "\n# início\n"
         self.index += 1
         while True:
@@ -365,7 +366,7 @@ class CodeGen:
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genProcedimentoBlock(self):
+    def genProcedimentoBlock(self) -> None:
         self.index += 1
         while True:
             token = self.tokens[self.index]
@@ -390,7 +391,7 @@ class CodeGen:
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genSeBLock(self):
+    def genSeBLock(self) -> None:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
@@ -416,7 +417,7 @@ class CodeGen:
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genSe(self):
+    def genSe(self) -> None:
         self.stdout += "if ("
         self.index += 2
         self.stdout += self.tokens[self.index].key
@@ -452,7 +453,7 @@ class CodeGen:
         self.level -= 1
         self.index += 1
 
-    def genParaBLock(self):
+    def genParaBLock(self) -> None:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
@@ -478,7 +479,7 @@ class CodeGen:
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genEnquantoBLock(self):
+    def genEnquantoBLock(self) -> None:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
@@ -504,7 +505,7 @@ class CodeGen:
             else:
                 raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genPara(self):
+    def genPara(self) -> None:
         self.stdout += "for "
         self.index += 1
         self.stdout += self.tokens[self.index].key
@@ -546,7 +547,7 @@ class CodeGen:
         if not self.level:
             self.stdout += "\n"
 
-    def genEnquanto(self):
+    def genEnquanto(self) -> None:
         self.stdout += "while ("
         self.index += 2
         self.stdout += self.tokens[self.index].key
@@ -562,10 +563,9 @@ class CodeGen:
 
         self.level -= 1
         self.index += 1
-        # if not self.level:
         self.stdout += "\n"
 
-    def genVarAssign(self):
+    def genVarAssign(self) -> None:
         self.index += 1
         self.stdout += " = "
 
@@ -603,7 +603,7 @@ class CodeGen:
 
         self.stdout += "\n"
 
-    def genId(self):
+    def genId(self) -> None:
         dtype = self.symtab.getType(self.tokens[self.index].key)
         if dtype == TokenTypes.procedimento or dtype == TokenTypes.funcao:
             self.stdout += f"{self.tokens[self.index].key}("
@@ -642,7 +642,7 @@ class CodeGen:
         if self.tokens[self.index].type == TokenTypes.rArrow:
             self.genVarAssign()
 
-    def genExp(self):
+    def genExp(self) -> None:
         while self.tokens[self.index].type == TokenTypes.lParen:
             self.stdout += "("
             self.index += 1
@@ -755,7 +755,7 @@ class CodeGen:
             self.stdout += ")"
             self.index += 1
 
-    def genLeia(self):
+    def genLeia(self) -> None:
         self.index += 1
 
         input_var = self.tokens[self.index].key
@@ -783,7 +783,7 @@ class CodeGen:
         else:
             self.stdout += f"{input_var} = {input_cast}\n"
 
-    def genEscreva(self):
+    def genEscreva(self) -> None:
         self.index += 1
         self.stdout += f"print({self.tokens[self.index].key}"
         self.index += 1
