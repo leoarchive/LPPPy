@@ -54,6 +54,9 @@ class CodeGen:
             return "None"
 
     def getAssigDType(self, key, size, matrix, _keytype):
+        if self.symtab.checkDType(key):
+            return f"{key}()"
+
         if key == TokenKeys.caractere:
             return "''"
         elif key == TokenKeys.inteiro:
