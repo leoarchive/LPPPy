@@ -127,7 +127,7 @@ class CodeGen:
 
         if self.tokens[self.index].key == TokenKeys.tipo:
             self.genRegistro()
-       
+
         while self.tokens[self.index].key == TokenKeys.procedimento:
             self.stdout += "\ndef "
             self.index += 1
@@ -161,7 +161,7 @@ class CodeGen:
             self.stdout += ")"
             self.index += 2
             self.level += 1
-  
+
             if self.tokens[self.index].type == TokenTypes.dType:
                 self.stdout += f" -> {self.getDType(self.tokens[self.index].key)}:\n"
                 self.index += 1
@@ -197,7 +197,7 @@ class CodeGen:
 
             elif self.tokens[self.index + 1].key == TokenKeys.comma:
                 contents = 1
-                self.stdout += '\t'
+                self.stdout += "\t"
 
                 while True:
                     self.stdout += self.tokens[self.index].key
@@ -235,7 +235,6 @@ class CodeGen:
                 self.stdout += f"\t{self.tokens[self.index].key} = {self.getAssigDType(self.tokens[self.index + 1].key, 0, False, None)}\n"
 
             self.index += 2
-
 
     def genVarBlock(self):
         while self.tokens[self.index].type != TokenTypes.inicio:

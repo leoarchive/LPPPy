@@ -176,7 +176,7 @@ class Parser:
     def parseRegistro(self, token):
         if token.type == TokenTypes.fimreg:
             return self.eatToken(token, TokenTypes.fimreg)
-             
+
         self.eatToken(token, TokenTypes.id)
 
         _symtokens = []

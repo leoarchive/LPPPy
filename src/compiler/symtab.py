@@ -19,7 +19,7 @@ from compiler.token import Token, TokenTypes
 
 class Symtab:
     symbols = []
-    dtypes  = []
+    dtypes = []
 
     def push(self, token: Token, dtype: TokenTypes) -> None:
         self.symbols.append(
@@ -35,10 +35,8 @@ class Symtab:
                 return sym["dtype"]
 
     def pushDType(self, token: str) -> None:
-        self.dtypes.append(
-            token
-        )
-    
+        self.dtypes.append(token)
+
     def checkDType(self, key: str) -> bool:
         for token in self.dtypes:
             if token.key == key:

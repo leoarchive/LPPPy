@@ -54,6 +54,6 @@ class Compiler:
             datetime.today().strftime("%d/%m/%Y %H:%M:%S"),
             timeit.default_timer() - self.startTime,
         )
-        self.stdout = header 
+        self.stdout = header
         self.stdout += f"# programa {self.codegen.programName}\n"
         self.stdout += self.codegen.stdout
