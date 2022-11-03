@@ -29,7 +29,7 @@ class Symtab:
             }
         )
 
-    def getType(self, key: str) -> TokenTypes or None:
+    def getType(self, key: str) -> TokenTypes:
         for sym in self.symbols:
             if sym["token"].key == key:
                 return sym["dtype"]

@@ -1,13 +1,1 @@
-#!/bin/bash
-
-LPPPY=src/lpppy
-PYTHON=python3
-FILE="$(basename -- $1)"
-
-$LPPPY $1
-
-if [ $? -eq 0 ]
-then
-  $PYTHON build/${FILE%.*}.py
-fi
-
+src/lpppy

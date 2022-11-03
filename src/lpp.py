@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
+from types import SimpleNamespace
 from compiler.main import Compiler
 from pathlib import Path
 import sys
@@ -22,18 +23,35 @@ import os
 
 class LPP:
     compiler = None
-    file = sys.argv[1]
+    file = None
+    config = SimpleNamespace(debug = False)
 
     def __init__(self):
+        if len(sys.argv) <= 1:
+            sys.tracebacklimit = 0
+            raise print("nothing to do!")
+        else:
+            self.file = sys.argv[1]
+
+        if len(sys.argv) > 2:
+            if sys.argv[1] == '--debug-mode':
+                self.file = sys.argv[2]
+                self.config.debug = True
+        else:
+            sys.tracebacklimit = 0
+
         self.compiler = Compiler(Path(self.file).read_text())
         self.compiler.run()
 
-        if not os.path.exists("build"):
-            os.mkdir("build")
+        if self.config.debug:
+            if not os.path.exists("build"):
+                os.mkdir("build")
 
-        build = open(f"build/{Path(self.file).name.split('.')[0]}.py", "w")
-        build.write(self.compiler.stdout)
-        build.close
+            build = open(f"build/{Path(self.file).name.split('.')[0]}.py", "w")
+            build.write(self.compiler.stdout)
+            build.close
+        else:
+            exec(self.compiler.stdout)
 
 
 LPP()

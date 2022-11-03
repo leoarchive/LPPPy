@@ -55,8 +55,9 @@ class CodeGen:
             return "None"
 
     def getAssigDType(self, key: str, size: int, matrix: bool, _keytype: str) -> str:
+        # f-string cast to fix a bizarre cython bug 
         if self.symtab.checkDType(key):
-            return f"{key}()"
+            return str(f"{key}()")
 
         if key == TokenKeys.caractere:
             return "''"
@@ -69,30 +70,30 @@ class CodeGen:
         elif key == TokenKeys.conjunto:
             if _keytype == TokenKeys.caractere:
                 if matrix:
-                    return f"[['' for _ in range({size})] for _ in range({size})]"
+                    return str(f"[['' for _ in range({size})] for _ in range({size})]")
                 elif size:
-                    return f"[''] * {size}"
+                    return str(f"[''] * {size}")
                 else:
                     return "['']"
             elif _keytype == TokenKeys.inteiro or _keytype == TokenKeys.logico:
                 if matrix and size:
-                    return f"[[0 for _ in range({size})] for _ in range({size})]"
+                    return str(f"[[0 for _ in range({size})] for _ in range({size})]")
                 elif size:
-                    return f"[0] * {size}"
+                    return str(f"[0] * {size}")
                 else:
                     return "[0]"
             elif _keytype == TokenKeys.real:
                 if matrix:
-                    return f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                    return str(f"[[0.0 for _ in range({size})] for _ in range({size})]")
                 elif size:
-                    return f"[0.0] * {size}"
+                    return str(f"[0.0] * {size}")
                 else:
                     return "[0.0]"
             else:
                 if matrix:
-                    return f"[0][0]"
+                    return str(f"[0][0]")
                 elif size:
-                    return f"[] * {size}"
+                    return str(f"[] * {size}")
                 else:
                     return "[]"
 

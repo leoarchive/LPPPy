@@ -167,7 +167,7 @@ class Lexer:
     def isAlphaOrOP(self, key: str) -> bool:
         return key.isalpha() or key == "=" or key == "<" or key == ">" or key == "_"
 
-    def lex(self) -> Token or None:
+    def lex(self) -> Token:
         if len(self.stdin) <= self.index:
             raise Error(
                 ErrorTypes.lexer_unexpected_token, {"key": "eof", "line": self.line}

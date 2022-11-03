@@ -1,10 +1,6 @@
 with import <nixpkgs> {};
 
 let
-  startScript = pkgs.writeShellScriptBin "start" 
-  ''
-    steam-run $(which bun) dev
-  '';
   buildScript = pkgs.writeShellScriptBin "build" 
   ''
   PYTHONLIBVER=python$(python3 -c 'import sys; print(".".join(map(str, sys.version_info[:2])))')$(python3-config --abiflags)
@@ -18,6 +14,8 @@ let
   rm -rf build
 	rm src/*.c
 	rm src/compiler/*.c
+
+  ln -s -f src/lpppy .
   '';
 in
   pkgs.mkShell {
@@ -31,7 +29,6 @@ in
       python310Packages.black
       python310Packages.cython
       
-      startScript
       buildScript
     ];
 
