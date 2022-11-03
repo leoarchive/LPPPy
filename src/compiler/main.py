@@ -15,7 +15,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 from .lex import Lexer
-from .parser import Parser
+from .parse import Parse
 from .code import CodeGen
 from .symtab import Symtab
 import timeit
@@ -35,7 +35,7 @@ class Compiler:
         self.stdin = stdin
         self.symtab = Symtab()
         self.lexer = Lexer(stdin)
-        self.parser = Parser(self.lexer, self.symtab)
+        self.parser = Parse(self.lexer, self.symtab)
         self.codegen = CodeGen(self.symtab)
 
     def run(self) -> None:

@@ -20,7 +20,7 @@ from .error import Error, ErrorTypes
 from .token import Token, TokenKeys, TokenTypes
 
 
-class Parser:
+class Parse:
     lexer: Lexer = None
     symtab: Symtab = None
     tokens: list[Token] = []
