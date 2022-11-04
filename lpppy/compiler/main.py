@@ -1,23 +1,7 @@
-#
-# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 Leonardo Z. N.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-from .lex import Lexer
-from .parse import Parse
-from .code import CodeGen
-from .symtab import Symtab
+from lpppy.compiler.lex import Lexer
+from lpppy.compiler.parse import Parse
+from lpppy.compiler.code import CodeGen
+from lpppy.compiler.symtab import Symtab
 import timeit
 from datetime import datetime
 

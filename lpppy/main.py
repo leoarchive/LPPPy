@@ -1,21 +1,5 @@
-#
-# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 Leonardo Z. N.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
+from lpppy.compiler.main import Compiler
 from types import SimpleNamespace
-from compiler.main import Compiler
 from pathlib import Path
 import sys
 import os
@@ -29,7 +13,8 @@ class LPP:
     def __init__(self):
         if len(sys.argv) <= 1:
             sys.tracebacklimit = 0
-            raise print("nothing to do!")
+            print("nothing to do!")
+            exit(0)
         else:
             self.file = sys.argv[1]
 
@@ -52,6 +37,5 @@ class LPP:
             build.close
         else:
             exec(self.compiler.stdout)
-
-
-LPP()
+            
+        exit(0)

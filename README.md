@@ -5,11 +5,8 @@ LPP (linguagem de projeto de programação) é uma linguagem de programação cr
 
 ## Como instalar
 
-Debian/Ubuntu/Arch/Manjaro
 ```
-git clone https://github.com/leozamboni/LPPPy.git;
-cd LPPPy;
-sudo ln -s lpppy /usr/local/bin/
+pip install LPPPy
 ```
 
 ## Como usar

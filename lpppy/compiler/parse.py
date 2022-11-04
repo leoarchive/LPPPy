@@ -1,23 +1,7 @@
-#
-# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 Leonardo Z. N.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-from compiler.lex import Lexer
-from compiler.symtab import Symtab
-from .error import Error, ErrorTypes
-from .token import Token, TokenKeys, TokenTypes
+from lpppy.compiler.lex import Lexer
+from lpppy.compiler.symtab import Symtab
+from lpppy.compiler.error import Error, ErrorTypes
+from lpppy.compiler.token import Token, TokenKeys, TokenTypes
 
 
 class Parse:
@@ -269,48 +253,44 @@ class Parse:
     def parseInicio(self) -> None:
         token = self.lexer.lex()
         while True:
-            if token.type == TokenTypes.fim:
-                return self.eatToken(token, TokenTypes.fim)
-            elif token.type == TokenTypes.id:
-                token = self.parseId(token)
-            elif token.type == TokenTypes.leia:
-                token = self.parseLeia(token)
-            elif token.type == TokenTypes.escreva:
-                token = self.parseEscreva(token)
-            elif token.type == TokenTypes.se:
-                token = self.parseSe(token)
-            elif token.type == TokenTypes.enquanto:
-                token = self.parseEnquanto(token)
-            elif token.type == TokenTypes.para:
-                token = self.parsePara(token)
-            else:
-                raise Error(ErrorTypes.parser_unexpected_token, token)
-
+            match token.type:
+                case TokenTypes.fim:
+                    return self.eatToken(token, TokenTypes.fim)
+                case TokenTypes.id:
+                    token = self.parseId(token)
+                case TokenTypes.leia:
+                    token = self.parseLeia(token)
+                case TokenTypes.escreva:
+                    token = self.parseEscreva(token)
+                case TokenTypes.se:
+                    token = self.parseSe(token)
+                case TokenTypes.enquanto:
+                    token = self.parseEnquanto(token)
+                case TokenTypes.para:
+                    token = self.parsePara(token)
+                case _:
+                    Error(ErrorTypes.parser_unexpected_token, token)
+            
     def parseBlock(self) -> None:
         token = self.lexer.lex()
         while True:
-            if (
-                token.type == TokenTypes.fimse
-                or token.type == TokenTypes.senao
-                or token.type == TokenTypes.fim
-                or token.type == TokenTypes.fimenq
-                or token.type == TokenTypes.fimpara
-            ):
-                return token
-            elif token.type == TokenTypes.id:
-                token = self.parseId(token)
-            elif token.type == TokenTypes.leia:
-                token = self.parseLeia(token)
-            elif token.type == TokenTypes.escreva:
-                token = self.parseEscreva(token)
-            elif token.type == TokenTypes.se:
-                token = self.parseSe(token)
-            elif token.type == TokenTypes.para:
-                token = self.parsePara(token)
-            elif token.type == TokenTypes.enquanto:
-                token = self.parseEnquanto(token)
-            else:
-                raise Error(ErrorTypes.parser_unexpected_token, token)
+            match token.type:
+                case TokenTypes.fimse | TokenTypes.senao | TokenTypes.fim | TokenTypes.fimenq | TokenTypes.fimpara:
+                    return token
+                case TokenTypes.id:
+                    token = self.parseId(token)
+                case TokenTypes.leia:
+                    token = self.parseLeia(token)
+                case TokenTypes.escreva:
+                    token = self.parseEscreva(token)
+                case TokenTypes.se:
+                    token = self.parseSe(token)
+                case TokenTypes.para:
+                    token = self.parsePara(token)
+                case TokenTypes.enquanto:
+                    token = self.parseEnquanto(token)
+                case _:
+                    Error(ErrorTypes.parser_unexpected_token, token)
 
     def parseSe(self, token) -> None:
         self.eatToken(token, TokenTypes.se)

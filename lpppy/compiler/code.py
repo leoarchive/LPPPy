@@ -1,22 +1,6 @@
-#
-# This file is part of the LPPPy distribution (https://github.com/leozamboni/LPPPy).
-# Copyright (c) 2022 Leonardo Z. N.
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, version 3.
-#
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-# General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <http://www.gnu.org/licenses/>.
-#
-from compiler.symtab import Symtab
-from .token import Token, TokenKeys, TokenTypes
-from .error import Error, ErrorTypes
+from lpppy.compiler.symtab import Symtab
+from lpppy.compiler.token import Token, TokenKeys, TokenTypes
+from lpppy.compiler.error import Error, ErrorTypes
 
 
 class CodeGen:
@@ -43,82 +27,86 @@ class CodeGen:
         if self.symtab.checkDType(key):
             return key
 
-        if key == TokenKeys.caractere:
-            return "str"
-        elif key == TokenKeys.inteiro:
-            return "int"
-        elif key == TokenKeys.real:
-            return "float"
-        elif key == TokenKeys.logico:
-            return "bool"
-        else:
-            return "None"
+        match key:
+            case TokenKeys.caractere:
+                return "str"
+            case TokenKeys.inteiro:
+                return "int"
+            case TokenKeys.real:
+                return "float"
+            case TokenKeys.logico:
+                return "bool"
+            case _: 
+                return "None"
 
     def getAssigDType(self, key: str, size: int, matrix: bool, _keytype: str) -> str:
-        # f-string cast to fix a bizarre cython bug 
         if self.symtab.checkDType(key):
-            return str(f"{key}()")
+            return f"{key}()"
 
-        if key == TokenKeys.caractere:
-            return "''"
-        elif key == TokenKeys.inteiro:
-            return "0"
-        elif key == TokenKeys.real:
-            return "0.0"
-        elif key == TokenKeys.logico:
-            return "False"
-        elif key == TokenKeys.conjunto:
-            if _keytype == TokenKeys.caractere:
-                if matrix:
-                    return str(f"[['' for _ in range({size})] for _ in range({size})]")
-                elif size:
-                    return str(f"[''] * {size}")
-                else:
-                    return "['']"
-            elif _keytype == TokenKeys.inteiro or _keytype == TokenKeys.logico:
-                if matrix and size:
-                    return str(f"[[0 for _ in range({size})] for _ in range({size})]")
-                elif size:
-                    return str(f"[0] * {size}")
-                else:
-                    return "[0]"
-            elif _keytype == TokenKeys.real:
-                if matrix:
-                    return str(f"[[0.0 for _ in range({size})] for _ in range({size})]")
-                elif size:
-                    return str(f"[0.0] * {size}")
-                else:
-                    return "[0.0]"
-            else:
-                if matrix:
-                    return str(f"[0][0]")
-                elif size:
-                    return str(f"[] * {size}")
-                else:
-                    return "[]"
+        match key:
+            case TokenKeys.caractere:
+                return "''"
+            case TokenKeys.inteiro:
+                return "0"
+            case TokenKeys.real:
+                return "0.0"
+            case TokenKeys.logico:
+                return "False"
+            case TokenKeys.conjunto:
+                match _keytype:
+                    case TokenKeys.caractere:
+                        if matrix and size:
+                            return f"[['' for _ in range({size})] for _ in range({size})]"
+                        elif size:
+                            return f"[''] * {size}"
+                        else:
+                            return "['']"
+                    case TokenKeys.inteiro | TokenKeys.logico:
+                        if matrix and size:
+                            return f"[[0 for _ in range({size})] for _ in range({size})]"
+                        elif size:
+                            return f"[0] * {size}"
+                        else:
+                            return "[0]"
+                    case TokenKeys.real:
+                        if matrix and size:
+                            return f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                        elif size:
+                            return f"[0.0] * {size}"
+                        else:
+                            return "[0.0]"
+                    case _:
+                        if matrix:
+                            return f"[0][0]"
+                        elif size:
+                            return f"[] * {size}"
+                        else:
+                            return "[]"
 
     def getInputCast(self, key: str) -> str:
         type = self.symtab.getType(key)
-        if type == TokenKeys.inteiro:
-            return "int(input())"
-        elif type == TokenKeys.real:
-            return "float(input())"
-        else:
-            return "input()"
+        match type:
+            case TokenKeys.inteiro:
+                return "int(input())"
+            case TokenKeys.real:
+                return "float(input())"
+            case _:
+                return "input()"
 
     def getLogical(self, key: str) -> str:
-        if key == TokenKeys._and:
-            return "and"
-        elif key == TokenKeys._not:
-            return "not"
-        elif key == TokenKeys._or:
-            return "or"
-        elif key == TokenKeys.NotEq:
-            return "!="
-        elif key == TokenKeys.equal:
-            return "=="
-        else:
-            return key
+        match key:
+            case TokenKeys._and:
+                return "and"
+            case TokenKeys._not:
+                return "not"
+            case TokenKeys._or:
+                return "or"
+            case TokenKeys.NotEq:
+                return "!="
+            case TokenKeys.equal:
+                return "=="
+            case _:
+                return key
 
     def getMath(self, key: str) -> str:
         if key == TokenKeys.exponent:
@@ -349,23 +337,25 @@ class CodeGen:
         self.index += 1
         while True:
             token = self.tokens[self.index]
-            if token.type == TokenTypes.fim:
-                self.stdout += "# fim\n"
-                break
-            elif token.type == TokenTypes.leia:
-                self.genLeia()
-            elif token.type == TokenTypes.escreva:
-                self.genEscreva()
-            elif token.type == TokenTypes.id:
-                self.genId()
-            elif token.type == TokenTypes.se:
-                self.genSe()
-            elif token.type == TokenTypes.para:
-                self.genPara()
-            elif token.type == TokenTypes.enquanto:
-                self.genEnquanto()
-            else:
-                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+
+            match token.type:
+                case TokenTypes.fim:
+                    self.stdout += "# fim\n"
+                    break
+                case TokenTypes.leia:
+                    self.genLeia()
+                case TokenTypes.escreva:
+                    self.genEscreva()
+                case TokenTypes.id:
+                    self.genId()
+                case TokenTypes.se:
+                    self.genSe()
+                case TokenTypes.para:
+                    self.genPara()
+                case TokenTypes.enquanto:
+                    self.genEnquanto()
+                case _:
+                    Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genProcedimentoBlock(self) -> None:
         self.index += 1
@@ -375,24 +365,25 @@ class CodeGen:
             for i in range(self.level):
                 self.stdout += "\t"
 
-            if token.type == TokenTypes.fim:
-                break
-            elif token.type == TokenTypes.leia:
-                self.genLeia()
-            elif token.type == TokenTypes.escreva:
-                self.genEscreva()
-            elif token.type == TokenTypes.id:
-                self.genId()
-            elif token.type == TokenTypes.se:
-                self.genSe()
-            elif token.type == TokenTypes.para:
-                self.genPara()
-            elif token.type == TokenTypes.enquanto:
-                self.genEnquanto()
-            else:
-                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+            match token.type:
+                case TokenTypes.fim:
+                    break
+                case TokenTypes.leia:
+                    self.genLeia()
+                case TokenTypes.escreva:
+                    self.genEscreva()
+                case TokenTypes.id:
+                    self.genId()
+                case TokenTypes.se:
+                    self.genSe()
+                case TokenTypes.para:
+                    self.genPara()
+                case TokenTypes.enquanto:
+                    self.genEnquanto()
+                case _:
+                    Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
-    def genSeBLock(self) -> None:
+    def genBlock(self) -> None:
         self.stdout += "\n"
         while True:
             token = self.tokens[self.index]
@@ -400,23 +391,24 @@ class CodeGen:
             for i in range(self.level):
                 self.stdout += "\t"
 
-            if token.type == TokenTypes.fimse or token.type == TokenTypes.senao:
-                self.stdout = self.stdout[:-1]
-                break
-            elif token.type == TokenTypes.leia:
-                self.genLeia()
-            elif token.type == TokenTypes.escreva:
-                self.genEscreva()
-            elif token.type == TokenTypes.id:
-                self.genId()
-            elif token.type == TokenTypes.se:
-                self.genSe()
-            elif token.type == TokenTypes.para:
-                self.genPara()
-            elif token.type == TokenTypes.enquanto:
-                self.genEnquanto()
-            else:
-                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
+            match token.type:
+                case TokenTypes.fimse | TokenTypes.senao | TokenTypes.fimpara | TokenTypes.fimenq:
+                    self.stdout = self.stdout[:-1]
+                    break
+                case TokenTypes.leia:
+                    self.genLeia()
+                case TokenTypes.escreva:
+                    self.genEscreva()
+                case TokenTypes.id:
+                    self.genId()
+                case TokenTypes.se:
+                    self.genSe()
+                case TokenTypes.para:
+                    self.genPara()
+                case TokenTypes.enquanto:
+                    self.genEnquanto()
+                case _:
+                    Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genSe(self) -> None:
         self.stdout += "if ("
@@ -444,67 +436,15 @@ class CodeGen:
         self.level += 1
 
         while self.tokens[self.index].type != TokenTypes.fimse:
-            self.genSeBLock()
+            self.genBlock()
             if self.tokens[self.index].type == TokenTypes.senao:
                 self.stdout += "else:"
                 self.index += 1
-                self.genSeBLock()
+                self.genBlock()
 
         self.stdout += "\n"
         self.level -= 1
         self.index += 1
-
-    def genParaBLock(self) -> None:
-        self.stdout += "\n"
-        while True:
-            token = self.tokens[self.index]
-
-            for i in range(self.level):
-                self.stdout += "\t"
-
-            if token.type == TokenTypes.fimpara:
-                self.stdout = self.stdout[:-1]
-                break
-            elif token.type == TokenTypes.leia:
-                self.genLeia()
-            elif token.type == TokenTypes.escreva:
-                self.genEscreva()
-            elif token.type == TokenTypes.id:
-                self.genId()
-            elif token.type == TokenTypes.se:
-                self.genSe()
-            elif token.type == TokenTypes.para:
-                self.genPara()
-            elif token.type == TokenTypes.enquanto:
-                self.genEnquanto()
-            else:
-                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
-
-    def genEnquantoBLock(self) -> None:
-        self.stdout += "\n"
-        while True:
-            token = self.tokens[self.index]
-
-            for i in range(self.level):
-                self.stdout += "\t"
-
-            if token.type == TokenTypes.fimenq:
-                self.stdout = self.stdout[:-1]
-                break
-            elif token.type == TokenTypes.leia:
-                self.genLeia()
-            elif token.type == TokenTypes.escreva:
-                self.genEscreva()
-            elif token.type == TokenTypes.id:
-                self.genId()
-            elif token.type == TokenTypes.se:
-                self.genSe()
-            elif token.type == TokenTypes.para:
-                self.genPara()
-            elif token.type == TokenTypes.enquanto:
-                self.genEnquanto()
-            else:
-                raise Error(ErrorTypes.code_internal_error_not_implemented_yet, token)
 
     def genPara(self) -> None:
         self.stdout += "for "
@@ -541,7 +481,7 @@ class CodeGen:
         self.level += 1
 
         if self.tokens[self.index].type != TokenTypes.fimpara:
-            self.genParaBLock()
+            self.genBlock()
 
         self.level -= 1
         self.index += 1
@@ -560,7 +500,7 @@ class CodeGen:
 
         self.level += 1
         if self.tokens[self.index].type != TokenTypes.fimpara:
-            self.genEnquantoBLock()
+            self.genBlock()
 
         self.level -= 1
         self.index += 1

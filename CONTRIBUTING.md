@@ -30,10 +30,9 @@ build é um script que utiliza cython e clang para gerar o binário estático.
 
 ## Convenções de código
 
-- Todo arquivo deve ser licenciado e conter o header com instruções da licença GPL 3 (pode ser copiado de um arquivo já existente);
 - Todo o código deve ser escrito em inglês, salva exceções para nomes referente a palavras reservadas da sintaxe do LPP (```programa```, ```início```, ```fim```, …).
 - Todo arquivo deve ser formatado utilizando black
 
 ## Licença de contribuições
 
-Este projeto está aberto para contribuições, sugestões e comentários. Todas as contribuições, sugestões e comentários enviados são aceitos sob a licença GPL 3. Você declara que, se não possuir direitos autorais no código, tem autoridade para enviá-lo sob a licença GPL 3. Todos os comentários, sugestões ou contribuições não são confidenciais.
+Este projeto está aberto para contribuições, sugestões e comentários. Todas as contribuições, sugestões e comentários enviados são aceitos sob a licença MIT. Você declara que, se não possuir direitos autorais no código, tem autoridade para enviá-lo sob a licença MIT. Todos os comentários, sugestões ou contribuições não são confidenciais.
