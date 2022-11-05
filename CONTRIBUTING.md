@@ -20,13 +20,10 @@ Se precisar fazer alguma pergunta sobre o projeto ou sobre qualquer coisa, você
 	
 ## Buildando
 
-Utilizando nix package:
 ```
-nix-shell nix/shell.nix;
-build;
+python setup.py check
+python setup.py sdist
 ```
-
-build é um script que utiliza cython e clang para gerar o binário estático. 
 
 ## Convenções de código
 
