@@ -24,7 +24,7 @@ class Parse:
 
     def eatToken(self, token: Token, expectedType: TokenTypes) -> None:
         if not token or token.type != expectedType:
-            raise Error(ErrorTypes.parser_unexpected_token, token)
+            Error(ErrorTypes.parser_unexpected_token, token)
 
         if not token.type in self.ignore:
             self.tokens.append(token)
