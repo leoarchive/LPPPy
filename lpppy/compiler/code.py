@@ -36,7 +36,7 @@ class CodeGen:
                 return "float"
             case TokenKeys.logico:
                 return "bool"
-            case _: 
+            case _:
                 return "None"
 
     def getAssigDType(self, key: str, size: int, matrix: bool, _keytype: str) -> str:
@@ -56,21 +56,27 @@ class CodeGen:
                 match _keytype:
                     case TokenKeys.caractere:
                         if matrix and size:
-                            return f"[['' for _ in range({size})] for _ in range({size})]"
+                            return (
+                                f"[['' for _ in range({size})] for _ in range({size})]"
+                            )
                         elif size:
                             return f"[''] * {size}"
                         else:
                             return "['']"
                     case TokenKeys.inteiro | TokenKeys.logico:
                         if matrix and size:
-                            return f"[[0 for _ in range({size})] for _ in range({size})]"
+                            return (
+                                f"[[0 for _ in range({size})] for _ in range({size})]"
+                            )
                         elif size:
                             return f"[0] * {size}"
                         else:
                             return "[0]"
                     case TokenKeys.real:
                         if matrix and size:
-                            return f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                            return (
+                                f"[[0.0 for _ in range({size})] for _ in range({size})]"
+                            )
                         elif size:
                             return f"[0.0] * {size}"
                         else:

@@ -153,9 +153,7 @@ class Lexer:
 
     def lex(self) -> Token:
         if len(self.stdin) <= self.index:
-            Error(
-                ErrorTypes.lexer_unexpected_token, {"key": "eof", "line": self.line}
-            )
+            Error(ErrorTypes.lexer_unexpected_token, {"key": "eof", "line": self.line})
 
         key = self.stdin[self.index]
 

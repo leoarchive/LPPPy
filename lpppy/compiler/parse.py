@@ -270,7 +270,7 @@ class Parse:
                     token = self.parsePara(token)
                 case _:
                     Error(ErrorTypes.parser_unexpected_token, token)
-            
+
     def parseBlock(self) -> None:
         token = self.lexer.lex()
         while True:

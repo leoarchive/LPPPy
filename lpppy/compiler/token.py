@@ -117,7 +117,7 @@ class Token:
         self.line = line
 
     def getType(key: TokenKeys) -> TokenTypes:
-        match key: 
+        match key:
             case TokenKeys.var:
                 return TokenTypes.var
             case TokenKeys.programa:

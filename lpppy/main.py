@@ -8,7 +8,7 @@ import os
 class LPP:
     compiler = None
     file = None
-    config = SimpleNamespace(debug = False)
+    config = SimpleNamespace(debug=False)
 
     def __init__(self):
         if len(sys.argv) <= 1:
@@ -19,7 +19,7 @@ class LPP:
             self.file = sys.argv[1]
 
         if len(sys.argv) > 2:
-            if sys.argv[1] == '--debug-mode':
+            if sys.argv[1] == "--debug-mode":
                 self.file = sys.argv[2]
                 self.config.debug = True
         else:
@@ -37,5 +37,5 @@ class LPP:
             build.close
         else:
             exec(self.compiler.stdout)
-            
+
         exit(0)
